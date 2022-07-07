@@ -5,4 +5,3 @@ sqlparse==0.4.2
 django
 gunicorn
 django-heroku
-requests
