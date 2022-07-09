@@ -16,6 +16,8 @@ from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+import os
+from corsheaders.defaults import default_headers
 
 import os
 from corsheaders.defaults import default_headers
@@ -40,20 +42,11 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-
-
-    'django.contrib.staticfiles',  # Required for GraphiQL
-    'graphene_django',
-    'graph'
-
+    'django.contrib.staticfiles',
     'corsheaders',
-
     'inventory'
 ]
 
-GRAPHENE = {
-    'SCHEMA': 'graph.schema.schema'
-}
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=7),
