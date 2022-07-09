@@ -1,12 +1,8 @@
 /*==============================================================*/
 /* DBMS name:      PostgreSQL 8                                 */
-/* Created on:     09/07/2022 12:07:12 p.m.                     */
+/* Created on:     09/07/2022 04:46:14 p.m.                     */
 /*==============================================================*/
 
-
-drop index ADMIN_PK;
-
-drop table ADMIN;
 
 drop index CATEGORY_PRODUCTS_PK;
 
@@ -19,8 +15,6 @@ drop index R8_FK;
 drop index CUSTOMERS_PK;
 
 drop table CUSTOMERS;
-
-drop index R1_FK;
 
 drop index EMPLOYEES_PK;
 
@@ -61,25 +55,6 @@ drop table TYPE_DOCUMENT;
 drop index TYPE_PERSON_PK;
 
 drop table TYPE_PERSON;
-
-/*==============================================================*/
-/* Table: ADMIN                                                 */
-/*==============================================================*/
-create table ADMIN (
-   ADMIN_ID             INT4                 not null,
-   ADMIN_NAME           VARCHAR(45)          not null,
-   ADMIN_LAST_NAME      VARCHAR(45)          not null,
-   ADMIN_USERNAME       VARCHAR(45)          not null,
-   ADMIN_PASSWORD       VARCHAR(45)          not null,
-   constraint PK_ADMIN primary key (ADMIN_ID)
-);
-
-/*==============================================================*/
-/* Index: ADMIN_PK                                              */
-/*==============================================================*/
-create unique index ADMIN_PK on ADMIN (
-ADMIN_ID
-);
 
 /*==============================================================*/
 /* Table: CATEGORY_PRODUCTS                                     */
@@ -138,7 +113,6 @@ TYPE_DOCUMENT_ID
 /*==============================================================*/
 create table EMPLOYEES (
    EMPLOYEE_ID          INT4                 not null,
-   ADMIN_ID             INT4                 not null,
    EMPLOYEE_NAME        VARCHAR(45)          not null,
    EMPLOYEE_LAST_NAME   VARCHAR(45)          not null,
    EMPLOYEE_PHONE       VARCHAR(10)          not null,
@@ -153,13 +127,6 @@ create table EMPLOYEES (
 /*==============================================================*/
 create unique index EMPLOYEES_PK on EMPLOYEES (
 EMPLOYEE_ID
-);
-
-/*==============================================================*/
-/* Index: R1_FK                                                 */
-/*==============================================================*/
-create  index R1_FK on EMPLOYEES (
-ADMIN_ID
 );
 
 /*==============================================================*/
@@ -227,23 +194,23 @@ CUSTOMER_ID
 /* Table: SALE_DESCRIPTION                                      */
 /*==============================================================*/
 create table SALE_DESCRIPTION (
-   PRODUCT_ID           INT4                 not null,
    SALE_ID              INT4                 not null,
+   PRODUCT_ID           INT4                 not null,
    DESCRIPTION_ID       INT4                 not null,
    TAX_ID               INT4                 null,
    UNITS                INT4                 not null,
    QUANTITY             INT4                 not null,
    DISCOUNT             MONEY                null,
    TOTAL                MONEY                not null,
-   constraint PK_SALE_DESCRIPTION primary key (PRODUCT_ID, SALE_ID, DESCRIPTION_ID)
+   constraint PK_SALE_DESCRIPTION primary key (SALE_ID, PRODUCT_ID, DESCRIPTION_ID)
 );
 
 /*==============================================================*/
 /* Index: SALE_DESCRIPTION_PK                                   */
 /*==============================================================*/
 create unique index SALE_DESCRIPTION_PK on SALE_DESCRIPTION (
-PRODUCT_ID,
 SALE_ID,
+PRODUCT_ID,
 DESCRIPTION_ID
 );
 
@@ -327,11 +294,6 @@ alter table CUSTOMERS
 alter table CUSTOMERS
    add constraint FK_CUSTOMER_R9_TYPE_DOC foreign key (TYPE_DOCUMENT_ID)
       references TYPE_DOCUMENT (TYPE_DOCUMENT_ID)
-      on delete restrict on update restrict;
-
-alter table EMPLOYEES
-   add constraint FK_EMPLOYEE_R1_ADMIN foreign key (ADMIN_ID)
-      references ADMIN (ADMIN_ID)
       on delete restrict on update restrict;
 
 alter table PRODUCTS
