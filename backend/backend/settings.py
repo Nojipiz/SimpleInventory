@@ -19,6 +19,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 import os
 from corsheaders.defaults import default_headers
 
+import os
+from corsheaders.defaults import default_headers
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/cheklist/
 
@@ -43,6 +46,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'inventory'
 ]
+
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=7),
