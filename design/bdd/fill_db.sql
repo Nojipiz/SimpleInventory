@@ -1,7 +1,4 @@
 
------------------------ADMIN-----------------------
-INSERT INTO ADMIN (admin_id, admin_name, admin_last_name, admin_username, admin_password) 
-VALUES (1051212, 'Pepito', 'Sevilla', 'pepito','123');
 
 -----------------------CATEGORY_PRODUCTS-----------------------
 INSERT INTO CATEGORY_PRODUCTS (category_id, category_name, category_description)
@@ -21,9 +18,9 @@ INSERT INTO  CUSTOMERS (customer_id, type_person_id, type_document_id, customer_
 VALUES (1002366, 1, 1, 'Andres', 'Rivera', '3123223454', 'andresrivera@gmail.com');
 
 -----------------------EMPLOYEES-----------------------
-INSERT INTO EMPLOYEES (employee_id, admin_id, employee_name, employee_last_name, employee_phone,
+INSERT INTO EMPLOYEES (employee_id, employee_name, employee_last_name, employee_phone,
 					   employee_email, employee_user_name, employee_password)
-VALUES (1002344, 1051212,'Luis', 'Perez','3234562353', 'luisperez@gmail.com', 'luisperez','luisp');
+VALUES (1002344,'Luis', 'Perez','3234562353', 'luisperez@gmail.com', 'luisperez','luisp');
 
  -----------------------PRODUCTS-----------------------
 INSERT INTO PRODUCTS (product_id, category_id, product_name, product_description, product_units,

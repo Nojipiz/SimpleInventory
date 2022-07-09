@@ -20,6 +20,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 import os
 from corsheaders.defaults import default_headers
 
+import os
+from corsheaders.defaults import default_headers
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/cheklist/
 
@@ -41,19 +44,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
 
-
-    'django.contrib.staticfiles',  # Required for GraphiQL
-    'graphene_django',
-    'graph'
+    'django.contrib.staticfiles',
 
     'corsheaders',
-
     'inventory'
 ]
 
-GRAPHENE = {
-    'SCHEMA': 'graph.schema.schema'
-}
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=7),
