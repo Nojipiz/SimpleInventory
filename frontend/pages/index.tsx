@@ -1,11 +1,12 @@
-import type { NextPage } from 'next'
+import Link from "next/link";
+import { ReactElement } from "react";
 
-const Home: NextPage = () => {
+export default function MainPage():ReactElement{
   return (
-    <h1 className="text-3xl font-bold underline">
-      Hi mom!
-    </h1>
+    <>
+      <Link href="/login">
+          <h1>Login</h1>
+      </Link>
+    </>
   )
 }
-
-export default Home
