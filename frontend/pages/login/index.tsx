@@ -7,11 +7,11 @@ const CredentialsContext = createContext<LoginCredentials>({username: "", passwo
 
 export default function Login(): ReactElement {
     return (
-        <div className="flex w-full text-3xl">
-            <div className="flex items-center justify-center w-full h-screen">
+        <div className="flex w-full text-3xl h-screen tablet:flex-col">
+            <div className="flex items-center justify-center w-full h-full">
               <BrandContainer/>
             </div>
-            <div className="flex items-center justify-center w-full h-screen">
+            <div className="flex items-center justify-center w-full h-full">
                 <CredentialsContext.Provider value={{ username: "", password: "" }}>
                     <LoginBoxContainer/>
                 </CredentialsContext.Provider>
@@ -37,12 +37,12 @@ function LoginBoxContainer():ReactElement{
             <h1 className="w-11/12 font-bold mb-10">Ingresar</h1>
             <form method="post" id="login" className="flex flex-col items-center justify-center w-11/12">
                 <label className="w-full font-bold">Usuario</label>
-                <InputElement type="text" name="user" placeHolder="tuusuario@proveedor.com" onChange={(text: string) => currentCredentials.username = text} />
+                <InputElement required={true} type="text" name="user" placeHolder="tuusuario@proveedor.com" onChange={(text: string) => currentCredentials.username = text}/>
                 <span className="h-5"> </span>
                 <label className="w-full font-bold">Contraseña</label>
-                <InputElement type="password" name="password" placeHolder="*******" onChange={(text: string) => currentCredentials.password = text} />
+                <InputElement required={true} type="password" name="password" placeHolder="*******" onChange={(text: string) => currentCredentials.password = text} />
                 <span className="h-5"> </span>
-                <ActionButton text="Entrar" dark={true} onClick={() => console.log(currentCredentials)}/>
+                <ActionButton text="Entrar" dark={true} onClick={() => console.log(currentCredentials)} preventDefault={false}/>
             </form>
       </div>
     );
