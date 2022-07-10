@@ -5,7 +5,7 @@ export default function ActionButton(props:Props):ReactElement{
     const style:string = color + 'text-white text-2xl rounded-full p-2 m-2 w-full';
     return(
         <button
-            type="button"
+            type={props.preventDefault ? "button" : undefined}
             className= {style}
             onClick={() => props.onClick()}>
             {props.text}
@@ -17,4 +17,5 @@ interface Props{
     onClick:Function;
     text: string;
     dark: boolean;
+    preventDefault: boolean;
 }
