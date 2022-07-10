@@ -20,12 +20,12 @@ export default function Login(): ReactElement {
     )
 }
 
-function BrandContainer(): ReactElement {
+function BrandContainer():ReactElement{
     return (
         <div className="flex flex-col items-center justify-center">
             <Icon.BoxSeam className="text-green-1" size={200} />
-            <h1 className="font-bold text-6xl">SimpleInventory</h1>
-            <h2 className="font-light text-3xl">Inventory and sells software</h2>
+            <h1 className="font-bold text-6xl tablet:text-4xl">SimpleInventory</h1>
+            <h2 className="font-light text-3xl tablet:text-2xl">Inventory and sells software</h2>
         </div>
     )
 }
