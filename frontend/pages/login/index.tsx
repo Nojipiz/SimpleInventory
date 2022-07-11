@@ -1,11 +1,10 @@
-import { createContext, ReactElement, useContext } from "react";
+import { createContext, ReactElement, useContext, useRef, useState } from "react";
 import ActionButton from "../../components/ActionButton";
 import * as Icon from "react-bootstrap-icons";
 import InputElement from "../../components/InputElement";
 import useAuth from "../../hooks/useAuth";
 import ToastWarning from "../../components/ToastWarning";
-
-const CredentialsContext = createContext<LoginCredentials>({ username: "", password: "" });
+import { useRouter } from "next/router";
 
 export default function Login(): ReactElement {
     const { isError } = useAuth();
@@ -16,9 +15,7 @@ export default function Login(): ReactElement {
                 <BrandContainer />
             </div>
             <div className="flex items-center justify-center w-full h-full">
-                <CredentialsContext.Provider value={{ username: "", password: "" }}>
-                    <LoginBoxContainer />
-                </CredentialsContext.Provider>
+                <LoginBoxContainer />
             </div>
         </div>
     )
@@ -35,23 +32,40 @@ function BrandContainer(): ReactElement {
 }
 
 function LoginBoxContainer(): ReactElement {
-    const currentCredentials = useContext(CredentialsContext);
+    const [credentials, setCredentials] = useState<LoginCredentials>();
     const { login, isLoading } = useAuth();
+    const [loadingNext, setLoadingNext] = useState<boolean>(false);
+    const router = useRouter();
+    const handleSubmit = async (e: any) => {
+        e.preventDefault();
+        let goHome = await login(credentials?.username, credentials?.password);
+        if (goHome){
+            setLoadingNext(true);
+            await router.push("/home");
+            setLoadingNext(false);
+        }
+    }
     return (
         <div className="flex flex-col items-center justify-center shadow w-7/12 rounded-lg pt-10 pb-10 min-w-fit">
             <h1 className="w-11/12 font-bold mb-10">Ingresar</h1>
-            <form method="post" id="login" className="flex flex-col items-center justify-center w-11/12">
-                <label className="w-full font-bold">Usuario</label>
-                <InputElement required={true} type="text" name="user" placeHolder="tuusuario@proveedor.com" onChange={(text: string) => currentCredentials.username = text} />
+            <form method="post" id="login" className="flex flex-col items-center justify-center w-11/12" onSubmit={handleSubmit}>
+                <label className="w-full font-bold mb-2">Usuario</label>
+                <InputElement required={true} type="text" name="user" placeHolder="tuusuario@proveedor.com" defaultValue=""
+                              onChange={ (text:string) => {
+                                  const updated:LoginCredentials = {username: text, password: credentials?.password};
+                                  setCredentials(updated);
+                              }} />
                 <span className="h-5"> </span>
-                <label className="w-full font-bold">Contraseña</label>
-                <InputElement required={true} type="password" name="password" placeHolder="*******" onChange={(text: string) => currentCredentials.password = text} />
+                <label className="w-full font-bold mb-2">Contraseña</label>
+                <InputElement required={true} type="password" name="password" placeHolder="*******" defaultValue=""
+                              onChange={(text:string) => {
+                                  const updated:LoginCredentials = {username: credentials?.username, password: text};
+                                  setCredentials(updated);
+                              }} />
                 <span className="h-5"> </span>
-                {isLoading == true ?
-                    <Icon.ArrowRepeat className="animate-spin text-green-2" />:
-                    <ActionButton text="Entrar" dark={true} onClick={() => {
-                        login(currentCredentials.username, currentCredentials.password);
-                    }} preventDefault={true} />
+                {isLoading == true || loadingNext == true ?
+                    <Icon.ArrowRepeat className="animate-spin text-green-2 h-20" /> :
+                    <ActionButton text="Entrar" dark={true} onClick={undefined} preventDefault={false} />
                 }
             </form>
         </div>
@@ -59,6 +73,6 @@ function LoginBoxContainer(): ReactElement {
 }
 
 interface LoginCredentials {
-    username: string;
-    password: string;
+    username: string | undefined;
+    password: string | undefined;
 }
