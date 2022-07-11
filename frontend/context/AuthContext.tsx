@@ -1,21 +1,24 @@
-import { createContext, ReactElement, useState } from "react";
+import { useRouter } from "next/router";
+import { createContext, ReactElement, useEffect, useState } from "react";
 import { loginRequest, Tokens } from "../pages/api/AuthService";
 import { sleep } from "../utils/Utils";
 
 
 export const AuthProvider = ({ children }: ReactElementsProps): ReactElement => {
     const [token, setToken] = useState<Tokens | null>(null);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isError, setIsError] = useState<boolean>(false);
-    const login = async (username: string, password: string) => {
+    const {asPath} = useRouter();
+    const router = useRouter();
+    const login = async (username: string, password: string):Promise<boolean> => {
         setIsLoading(true);
         const credential = await loginRequest(username, password);
         if (!credential.access)
             setCredentialsError();
         else
             setToken(credential);
-        console.log("Added JWT " + credential.access);
         setIsLoading(false);
+        return !(credential.access == undefined);
     }
 
     const logout = () => {
@@ -25,11 +28,15 @@ export const AuthProvider = ({ children }: ReactElementsProps): ReactElement => 
     }
 
     const setCredentialsError = async () => {
-        console.log("Hi")
         setIsError(true);
         await sleep(5000);
         setIsError(false);
     }
+
+    useEffect(() => {
+       if(token == null && !isLoading && asPath != "/login")
+           router.push("/login")
+    }, [token, isLoading]);
 
     return (
         <AuthContext.Provider value={{ login, token, logout, isLoading, isError }}>
