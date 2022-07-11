@@ -8,15 +8,15 @@ export const AuthProvider = ({ children }: ReactElementsProps): ReactElement => 
     const [token, setToken] = useState<Tokens | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isError, setIsError] = useState<boolean>(false);
-    const {asPath} = useRouter();
+    const { asPath } = useRouter();
     const router = useRouter();
 
-    const login = async (username: string, password: string):Promise<boolean> => {
+    const login = async (username: string, password: string): Promise<boolean> => {
         setIsLoading(true);
         const credential = await loginRequest(username, password);
         if (!credential.access)
             setCredentialsError();
-        else{
+        else {
             setToken(credential);
             localStorage.setItem('refresh', credential.refresh);
             localStorage.setItem('access', credential.access);
@@ -31,33 +31,29 @@ export const AuthProvider = ({ children }: ReactElementsProps): ReactElement => 
         setIsLoading(false);
     }
 
-    const refresh = async (token:string) => {
-        setIsLoading(true);
-        const credential = await refreshRequest(token);
-        if(!credential.access) return;
-        setToken(credential);
-        console.log("Refreshed token")
-        localStorage.setItem('refresh', credential.refresh);
-        localStorage.setItem('access', credential.access);
-        setIsLoading(false);
-    }
-
     const setCredentialsError = async () => {
         setIsError(true);
         await sleep(5000);
         setIsError(false);
     }
 
-    useEffect(() => {
-       if(token == null && !isLoading && asPath != "/login")
-           router.push("/login")
-    }, [token, isLoading]);
+    const checkForSavedToken = (): boolean => {
+        console.log("Loaded last session from local data")
+        const savedAccess = localStorage.getItem('access');
+        const savedRefresh = localStorage.getItem('refresh');
+        if (savedAccess != null) {
+            setToken({ access: savedAccess, refresh: savedRefresh ? savedRefresh : savedAccess });
+            return true;
+        }
+        return false;
 
-    //useEffect(() => {
-    //    const refreshToken = localStorage.getItem('refresh');
-    //    if (refreshToken != null)
-    //        refresh(refreshToken);
-    //}, []);
+    }
+
+    useEffect(() => {
+        if (token != null || isLoading || asPath == "/login") return;
+        if(token == null && checkForSavedToken()) return;
+        router.push("/login")
+    }, [token, isLoading]);
 
     return (
         <AuthContext.Provider value={{ login, token, logout, isLoading, isError }}>
