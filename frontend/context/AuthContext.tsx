@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { createContext, ReactElement, useEffect, useState } from "react";
-import { loginRequest, refreshRequest, Tokens } from "../pages/api/AuthService";
+import LoadingScreen from "../components/LoadingScreen";
+import { loginRequest, Tokens } from "../pages/api/AuthService";
 import { sleep } from "../utils/Utils";
 
 
@@ -28,6 +29,8 @@ export const AuthProvider = ({ children }: ReactElementsProps): ReactElement => 
     const logout = () => {
         setIsLoading(true);
         setToken(null);
+        localStorage.removeItem('refresh');
+        localStorage.removeItem('access');
         setIsLoading(false);
     }
 
@@ -37,7 +40,7 @@ export const AuthProvider = ({ children }: ReactElementsProps): ReactElement => 
         setIsError(false);
     }
 
-    const checkForSavedToken = (): boolean => {
+    const thereIsSavedToken = (): boolean => {
         console.log("Loaded last session from local data")
         const savedAccess = localStorage.getItem('access');
         const savedRefresh = localStorage.getItem('refresh');
@@ -46,15 +49,22 @@ export const AuthProvider = ({ children }: ReactElementsProps): ReactElement => 
             return true;
         }
         return false;
-
     }
 
     useEffect(() => {
-        if (token != null || isLoading || asPath == "/login") return;
-        if(token == null && checkForSavedToken()) return;
-        router.push("/login")
-    }, [token, isLoading]);
+        if(isLoading) return;
+        if(asPath === "/login"){
+           if(token !== null || thereIsSavedToken())
+               router.push("/home");
+        }else{
+           if(token === null && !thereIsSavedToken())
+               router.push("/login");
+        }
+    },  [token, isLoading]);
 
+
+    if (token  == null && !isLoading && asPath !== "/login")
+        return(<LoadingScreen/>);
     return (
         <AuthContext.Provider value={{ login, token, logout, isLoading, isError }}>
             {children}
