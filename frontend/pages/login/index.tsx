@@ -38,8 +38,7 @@ function LoginBoxContainer(): ReactElement {
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         setLoadingNext(true);
-        const access = await login(credentials?.username, credentials?.password);
-        if (!access) return;
+        await login(credentials?.username, credentials?.password);
         setLoadingNext(false);
     }
     return (
