@@ -1,4 +1,4 @@
-import { createContext, ReactElement, useContext, useRef, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import ActionButton from "../../components/ActionButton";
 import * as Icon from "react-bootstrap-icons";
 import InputElement from "../../components/InputElement";
@@ -35,15 +35,12 @@ function LoginBoxContainer(): ReactElement {
     const [credentials, setCredentials] = useState<LoginCredentials>();
     const { login, isLoading } = useAuth();
     const [loadingNext, setLoadingNext] = useState<boolean>(false);
-    const router = useRouter();
     const handleSubmit = async (e: any) => {
         e.preventDefault();
-        let goHome = await login(credentials?.username, credentials?.password);
-        if (goHome){
-            setLoadingNext(true);
-            await router.push("/home");
-            setLoadingNext(false);
-        }
+        setLoadingNext(true);
+        const access = await login(credentials?.username, credentials?.password);
+        if (!access) return;
+        setLoadingNext(false);
     }
     return (
         <div className="flex flex-col items-center justify-center shadow w-7/12 rounded-lg pt-10 pb-10 min-w-fit">
@@ -51,17 +48,17 @@ function LoginBoxContainer(): ReactElement {
             <form method="post" id="login" className="flex flex-col items-center justify-center w-11/12" onSubmit={handleSubmit}>
                 <label className="w-full font-bold mb-2">Usuario</label>
                 <InputElement required={true} type="text" name="user" placeHolder="tuusuario@proveedor.com" defaultValue=""
-                              onChange={ (text:string) => {
-                                  const updated:LoginCredentials = {username: text, password: credentials?.password};
-                                  setCredentials(updated);
-                              }} />
+                    onChange={(text: string) => {
+                        const updated: LoginCredentials = { username: text, password: credentials?.password };
+                        setCredentials(updated);
+                    }} />
                 <span className="h-5"> </span>
                 <label className="w-full font-bold mb-2">Contraseña</label>
                 <InputElement required={true} type="password" name="password" placeHolder="*******" defaultValue=""
-                              onChange={(text:string) => {
-                                  const updated:LoginCredentials = {username: credentials?.username, password: text};
-                                  setCredentials(updated);
-                              }} />
+                    onChange={(text: string) => {
+                        const updated: LoginCredentials = { username: credentials?.username, password: text };
+                        setCredentials(updated);
+                    }} />
                 <span className="h-5"> </span>
                 {isLoading == true || loadingNext == true ?
                     <Icon.ArrowRepeat className="animate-spin text-green-2 h-20" /> :
