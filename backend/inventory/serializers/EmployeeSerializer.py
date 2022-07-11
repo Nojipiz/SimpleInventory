@@ -20,8 +20,8 @@ class EmployeeSerializer(serializers.ModelSerializer):
         return employee_instance
 
     def to_representation(self, instance):
-        employee: Employees = Employees.objects.get(employee_id=instance[0].employee_id)
-        user = User.objects.get(id=instance[0].user.id)
+        employee = Employees.objects.get(employee_id=instance.employee_id)
+        user = User.objects.get(id=instance.employee_user_id)
         return {
             'id': employee.employee_id,
             'name': employee.employee_name,

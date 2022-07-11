@@ -1,8 +1,10 @@
-from django.urls import path
+from rest_framework.routers import DefaultRouter
 
-from .controllers.EmployeeController import EmployeeCreate, EmployeeDetail
+from .controllers.EmployeeController import EmployeeViewSet
 
-urlpatterns = [
-    path('users/', EmployeeDetail.as_view()),
-    path('users/create', EmployeeCreate.as_view()),
-]
+appName = 'inventory'
+router = DefaultRouter()
+
+router.register(r'employees', EmployeeViewSet, basename="employees")
+
+urlpatterns = router.urls

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 
     'django.contrib.staticfiles',
     'rest_framework',
+    'drf_yasg',
     'corsheaders',
     'inventory'
 ]
@@ -144,6 +145,25 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
+}
+
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': True,
+    'LOGIN_URL': 'login/',
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
+        'rest_framework.parsers.JSONParser',
+    ],
+    'JSON_EDITOR': True,
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization',
+            "description": "JWT authorization"
+        }
+    },
 }
 
 # Internationalization

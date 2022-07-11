@@ -11,8 +11,11 @@ class Employees(models.Model):
     employee_email = models.EmailField(max_length=100)
     employee_user_name = models.CharField(max_length=45)
     employee_password = models.CharField(max_length=45)
-    employee_user = models.ForeignKey(User, related_name='user', on_delete=models.CASCADE, null=True, blank=True)
+    employee_user = models.ForeignKey(User, related_name='user', on_delete=models.CASCADE,
+                                      null=True, blank=True)
 
     class Meta:
         managed = True
         db_table = 'employees'
+
+    objects = models.Manager()
