@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { createContext, ReactElement, useEffect, useState } from "react";
-import { loginRequest, Tokens } from "../pages/api/AuthService";
+import { loginRequest, refreshRequest, Tokens } from "../pages/api/AuthService";
 import { sleep } from "../utils/Utils";
 
 
@@ -10,13 +10,17 @@ export const AuthProvider = ({ children }: ReactElementsProps): ReactElement => 
     const [isError, setIsError] = useState<boolean>(false);
     const {asPath} = useRouter();
     const router = useRouter();
+
     const login = async (username: string, password: string):Promise<boolean> => {
         setIsLoading(true);
         const credential = await loginRequest(username, password);
         if (!credential.access)
             setCredentialsError();
-        else
+        else{
             setToken(credential);
+            localStorage.setItem('refresh', credential.refresh);
+            localStorage.setItem('access', credential.access);
+        }
         setIsLoading(false);
         return !(credential.access == undefined);
     }
@@ -24,6 +28,17 @@ export const AuthProvider = ({ children }: ReactElementsProps): ReactElement => 
     const logout = () => {
         setIsLoading(true);
         setToken(null);
+        setIsLoading(false);
+    }
+
+    const refresh = async (token:string) => {
+        setIsLoading(true);
+        const credential = await refreshRequest(token);
+        if(!credential.access) return;
+        setToken(credential);
+        console.log("Refreshed token")
+        localStorage.setItem('refresh', credential.refresh);
+        localStorage.setItem('access', credential.access);
         setIsLoading(false);
     }
 
@@ -37,6 +52,12 @@ export const AuthProvider = ({ children }: ReactElementsProps): ReactElement => 
        if(token == null && !isLoading && asPath != "/login")
            router.push("/login")
     }, [token, isLoading]);
+
+    //useEffect(() => {
+    //    const refreshToken = localStorage.getItem('refresh');
+    //    if (refreshToken != null)
+    //        refresh(refreshToken);
+    //}, []);
 
     return (
         <AuthContext.Provider value={{ login, token, logout, isLoading, isError }}>
