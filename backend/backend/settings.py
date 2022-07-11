@@ -73,6 +73,7 @@ MIDDLEWARE = [
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:8000',
     'https://simpleinventorybackend.herokuapp.com',
+    'http://localhost:3000',
 )
 
 CORS_ALLOW_HEADERS = list(default_headers) + [
