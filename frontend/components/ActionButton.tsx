@@ -7,14 +7,17 @@ export default function ActionButton(props:Props):ReactElement{
         <button
             type={props.preventDefault ? "button" : undefined}
             className= {style}
-            onClick={() => props.onClick()}>
+            onClick={() => {
+                if(props.onClick != undefined)
+                    props.onClick();
+            }}>
             {props.text}
         </button>
     );
 }
 
 interface Props{
-    onClick:Function;
+    onClick:Function|undefined;
     text: string;
     dark: boolean;
     preventDefault: boolean;
