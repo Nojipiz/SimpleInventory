@@ -1,15 +1,6 @@
-
-
-# Create your models here.
-
-# This is an auto-generated Django model module.
-# You'll have to do the following manually to clean this up:
-#   * Rearrange models' order
-#   * Make sure each model has one field with primary_key=True
-#   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
-#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
-# Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
+
+from ..models import Employees
 
 
 class CategoryProducts(models.Model):
@@ -18,7 +9,7 @@ class CategoryProducts(models.Model):
     category_description = models.CharField(max_length=45)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'category_products'
 
 
@@ -32,22 +23,8 @@ class Customers(models.Model):
     customer_email = models.CharField(max_length=100)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'customers'
-
-
-class Employees(models.Model):
-    employee_id = models.IntegerField(primary_key=True)
-    employee_name = models.CharField(max_length=45)
-    employee_last_name = models.CharField(max_length=45)
-    employee_phone = models.CharField(max_length=10)
-    employee_email = models.CharField(max_length=100)
-    employee_user_name = models.CharField(max_length=45)
-    employee_password = models.CharField(max_length=45)
-
-    class Meta:
-        managed = False
-        db_table = 'employees'
 
 
 class Products(models.Model):
@@ -60,7 +37,7 @@ class Products(models.Model):
     product_status = models.BooleanField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'products'
 
 
@@ -72,7 +49,7 @@ class Sale(models.Model):
     sale_details = models.CharField(max_length=45)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'sale'
 
 
@@ -87,19 +64,20 @@ class SaleDescription(models.Model):
     total = models.TextField()  # This field type is a guess.
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'sale_description'
-        unique_together = (('sale', 'product', 'description_id'), ('sale', 'product', 'description_id'),)
+        unique_together = \
+            (('sale', 'product', 'description_id'), ('sale', 'product', 'description_id'),)
 
 
 class Taxes(models.Model):
     tax_id = models.IntegerField(primary_key=True)
     tax_name = models.CharField(max_length=45)
     tax_description = models.CharField(max_length=45)
-    tax_value = models.DecimalField(max_digits=65535, decimal_places=65535)
+    tax_value = models.DecimalField(max_digits=999, decimal_places=999)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'taxes'
 
 
@@ -108,7 +86,7 @@ class TypeDocument(models.Model):
     type_document_name = models.CharField(max_length=45)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'type_document'
 
 
@@ -118,5 +96,5 @@ class TypePerson(models.Model):
     type_person_description = models.CharField(max_length=45)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'type_person'
