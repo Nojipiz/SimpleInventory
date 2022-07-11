@@ -7,6 +7,7 @@ export async function loginRequest(username: string, password: string): Promise<
     });
     const response = await fetch(API_URL + "/login", {
         method: 'POST',
+        credentials: 'include',
         headers: {
             "Content-Type": "application/json",
         },
