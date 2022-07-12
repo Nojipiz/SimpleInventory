@@ -1,16 +1,8 @@
 from django.db import models
 
 from ..models import Employees
+from ..models.Products import Products
 
-
-class CategoryProducts(models.Model):
-    category_id = models.IntegerField(primary_key=True)
-    category_name = models.CharField(max_length=45)
-    category_description = models.CharField(max_length=45)
-
-    class Meta:
-        managed = True
-        db_table = 'category_products'
 
 
 class Customers(models.Model):
@@ -26,19 +18,6 @@ class Customers(models.Model):
         managed = True
         db_table = 'customers'
 
-
-class Products(models.Model):
-    product_id = models.IntegerField(primary_key=True)
-    category = models.ForeignKey(CategoryProducts, models.DO_NOTHING)
-    product_name = models.CharField(max_length=45)
-    product_description = models.CharField(max_length=45)
-    product_units = models.CharField(max_length=45)
-    product_price = models.TextField()  # This field type is a guess.
-    product_status = models.BooleanField()
-
-    class Meta:
-        managed = True
-        db_table = 'products'
 
 
 class Sale(models.Model):
