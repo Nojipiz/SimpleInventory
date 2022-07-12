@@ -9,14 +9,13 @@ schema_view = get_schema_view(
         default_version='v1',
         description="Api to manage inventory",
         contact=openapi.Contact(email="contact@mail.com"),
-        urlconf="inventory.urls",
     ),
     public=True,
 )
 
 urlpatterns = [
-    path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('api/', include('inventory.urls'), name='api'),
+    path('docs', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('', include('inventory.urls'), name='api'),
     path('login', TokenObtainPairView.as_view(), name='login'),
     path('refresh', TokenRefreshView.as_view()),
 ]
