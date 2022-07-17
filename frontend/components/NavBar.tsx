@@ -11,6 +11,7 @@ export default function NavBar(): ReactElement {
                 <BillsButton />
                 <ClientsButton />
                 <ProductsButton />
+                <ProductsCategoryButton/>
                 <ReportsButton />
             </ul>
             <ul className="flex-row text-white font-bold text-1xl">
@@ -59,6 +60,17 @@ function ProductsButton(): ReactElement {
             <li className="flex flex-col items-center justify-center p-5 ml-2 cursor-pointer">
                 <Icon.BoxSeam size={30} />
                 <a>Productos</a>
+            </li>
+        </Link>
+    );
+}
+
+function ProductsCategoryButton(): ReactElement {
+    return (
+        <Link href={"/productsCategory"}>
+            <li className="flex flex-col items-center justify-center p-5 ml-2 cursor-pointer">
+                <Icon.BoxSeam size={30} />
+                <a>Categoria productos</a>
             </li>
         </Link>
     );
