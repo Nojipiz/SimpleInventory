@@ -44,7 +44,7 @@ function ProductsCategoryList(): ReactElement {
             <table className="w-full">
                 <ListHeader />
                 <tbody>
-                    {products?.map(product => <ProductComponent product_category={product} />)}
+                    {products?.map(product => <ProductComponent key={product.category_id} product_category={product} />)}
                 </tbody>
             </table>
         </div>
@@ -72,16 +72,17 @@ function ListHeader(): ReactElement {
 
 function ProductComponent(props: ProductProps): ReactElement {
     const lineStyle: string = "font-normal text-2xl text-center pt-3 pb-3";
+    console.log(props.product_category)
     return (
         <tr className="shadow-md rounded">
             <td className={lineStyle}>
-                {props.product_category.product_category_id}
+                {props.product_category.category_id}
             </td>
             <td className={lineStyle}>
-                {props.product_category.product_category_name}
+                {props.product_category.category_name}
             </td>          
             <td className={lineStyle}>
-                {props.product_category.product_category_description}
+                {props.product_category.category_description}
             </td>
         </tr>
     )

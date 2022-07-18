@@ -1,5 +1,5 @@
 export interface Product_category{
-    product_category_id: string,
-    product_category_name: string,
-    product_category_description:string
+    category_id: string,
+    category_name: string,
+    category_description:string
 }
