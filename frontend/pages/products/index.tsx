@@ -1,33 +1,47 @@
-import { ReactElement, useEffect, useState } from "react";
+import { createContext, ReactElement, useContext, useEffect, useState } from "react";
 import ActionButton from "../../components/ActionButton";
 import NavBar from "../../components/NavBar";
 import SearchserInput from "../../components/SearcherInput";
 import useAuth from "../../hooks/useAuth";
 import { Product } from "../../models/Product";
 import { getAllProducts } from "../api/Products";
+import CreateProduct from "./CreateProduct";
+
+export const AddProductContext = createContext<ContextModal>({isOpen: false, setOpen: ()=> {}});
+
+interface ContextModal{
+   isOpen: boolean,
+   setOpen: Function
+}
 
 export default function Productos(): ReactElement {
+    const [addProductOpen, setAddProductOpen] = useState<boolean>(true);
     return (
-        <>
+        <AddProductContext.Provider value={{isOpen:addProductOpen, setOpen:setAddProductOpen}}>
+            {addProductOpen === true &&
+                <CreateProduct/>
+            }
             <Header />
             <ProductsList />
             <NavBar />
-        </>
+        </AddProductContext.Provider>
     )
 }
 
 
 function Header(): ReactElement {
+    const {setOpen} = useContext(AddProductContext);
     return (
         <header className="flex flex-row m-5 justify-between tablet:flex-col">
             <h1 className="font-bold text-2xl">Productos</h1>
             <SearchserInput placeholder="Busca los productos aqui" onSearch={() => console.log("This must search")} />
             <div className="w-100">
-                <ActionButton onClick={() => console.log("Hi")} text="Crear Producto" dark={false} preventDefault={false} />
+                <ActionButton onClick={() => setOpen(true)} text="Crear Producto" dark={false} preventDefault={false} />
             </div>
         </header>
     );
 }
+
 
 function ProductsList(): ReactElement {
     const [products, setProducts] = useState<Product[]>();
@@ -52,7 +66,7 @@ function ProductsList(): ReactElement {
 }
 
 function ListHeader(): ReactElement {
-    const lineStyle: string = "font-normal text-2xl";
+    const lineStyle: string = "font-normal text-1xl";
     return (
         <thead>
             <tr className="table-auto">
@@ -80,7 +94,7 @@ function ListHeader(): ReactElement {
 }
 
 function ProductComponent(props: ProductProps): ReactElement {
-    const lineStyle: string = "font-normal text-2xl text-center pt-3 pb-3";
+    const lineStyle: string = "font-normal text-1xl text-center pt-3 pb-3";
     return (
         <tr className="shadow-md rounded">
             <td className={lineStyle}>

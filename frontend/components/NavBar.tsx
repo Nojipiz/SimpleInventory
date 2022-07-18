@@ -23,8 +23,8 @@ export default function NavBar(): ReactElement {
 function HomeButton(): ReactElement {
     return (
         <Link href={"/home"}>
-            <li className="flex flex-col bg-green-2 h-full justify-center items-center p-5 cursor-pointer">
-                <Icon.House size={30} />
+            <li className="flex flex-col bg-green-2 h-full justify-center items-center p-3 cursor-pointer">
+                <Icon.House size={20} />
                 <a>Inicio</a>
             </li>
         </Link>
@@ -34,8 +34,8 @@ function HomeButton(): ReactElement {
 function BillsButton(): ReactElement {
     return (
         <Link href={"/bills"}>
-            <li className="flex flex-col items-center justify-center p-5 ml-2 cursor-pointer">
-                <Icon.Receipt size={30} />
+            <li className="flex flex-col items-center justify-center p-3 ml-2 cursor-pointer">
+                <Icon.Receipt size={20} />
                 <a>Facturas</a>
             </li>
         </Link>
@@ -45,8 +45,8 @@ function BillsButton(): ReactElement {
 function ClientsButton(): ReactElement {
     return (
         <Link href={"/clients"}>
-            <li className="flex flex-col items-center justify-center p-5 ml-2 cursor-pointer">
-                <Icon.People size={30} />
+            <li className="flex flex-col items-center justify-center p-3 ml-2 cursor-pointer">
+                <Icon.People size={20} />
                 <a>Clientes</a>
             </li>
         </Link>
@@ -56,8 +56,8 @@ function ClientsButton(): ReactElement {
 function ProductsButton(): ReactElement {
     return (
         <Link href={"/products"}>
-            <li className="flex flex-col items-center justify-center p-5 ml-2 cursor-pointer">
-                <Icon.BoxSeam size={30} />
+            <li className="flex flex-col items-center justify-center p-3 ml-2 cursor-pointer">
+                <Icon.BoxSeam size={20} />
                 <a>Productos</a>
             </li>
         </Link>
@@ -67,8 +67,8 @@ function ProductsButton(): ReactElement {
 function ReportsButton(): ReactElement {
     return (
         <Link href={"/reports"}>
-            <li className="flex flex-col items-center justify-center p-5 ml-2 cursor-pointer">
-                <Icon.GraphUpArrow size={30} />
+            <li className="flex flex-col items-center justify-center p-3 ml-2 cursor-pointer">
+                <Icon.GraphUpArrow size={20} />
                 <a>Reportes</a>
             </li>
         </Link>
@@ -79,8 +79,8 @@ function ReportsButton(): ReactElement {
 function LogoutButton(): ReactElement {
     const {logout} = useAuth();
     return (
-        <li className="flex flex-col items-center justify-center p-5 ml-2 cursor-pointer" onClick={() => logout()}>
-            <Icon.BoxArrowRight size={30} />
+        <li className="flex flex-col items-center justify-center p-3 ml-2 cursor-pointer" onClick={() => logout()}>
+            <Icon.BoxArrowRight size={20} />
             <a>Salir</a>
         </li>
     );
