@@ -1,5 +1,6 @@
 import { createContext, ReactElement, useContext, useEffect, useState } from "react";
 import ActionButton from "../../components/ActionButton";
+import LoadingComponent from "../../components/LoadingComponent";
 import NavBar from "../../components/NavBar";
 import SearchserInput from "../../components/SearcherInput";
 import useAuth from "../../hooks/useAuth";
@@ -7,19 +8,19 @@ import { Product } from "../../models/Product";
 import { getAllProducts } from "../api/Products";
 import CreateProduct from "./CreateProduct";
 
-export const AddProductContext = createContext<ContextModal>({isOpen: false, setOpen: ()=> {}});
+export const AddProductContext = createContext<ContextModal>({ isOpen: false, setOpen: () => { } });
 
-interface ContextModal{
-   isOpen: boolean,
-   setOpen: Function
+interface ContextModal {
+    isOpen: boolean,
+    setOpen: Function
 }
 
 export default function Productos(): ReactElement {
-    const [addProductOpen, setAddProductOpen] = useState<boolean>(true);
+    const [addProductOpen, setAddProductOpen] = useState<boolean>(false);
     return (
-        <AddProductContext.Provider value={{isOpen:addProductOpen, setOpen:setAddProductOpen}}>
+        <AddProductContext.Provider value={{ isOpen: addProductOpen, setOpen: setAddProductOpen }}>
             {addProductOpen === true &&
-                <CreateProduct/>
+                <CreateProduct />
             }
             <Header />
             <ProductsList />
@@ -30,7 +31,7 @@ export default function Productos(): ReactElement {
 
 
 function Header(): ReactElement {
-    const {setOpen} = useContext(AddProductContext);
+    const { setOpen } = useContext(AddProductContext);
     return (
         <header className="flex flex-row m-5 justify-between tablet:flex-col">
             <h1 className="font-bold text-2xl">Productos</h1>
@@ -45,22 +46,31 @@ function Header(): ReactElement {
 
 function ProductsList(): ReactElement {
     const [products, setProducts] = useState<Product[]>();
+    const [loading, setLoading] = useState<boolean>();
     const { token } = useAuth();
+
     useEffect(() => {
         const getData = async () => {
+            setLoading(true);
             const elements = await getAllProducts(token?.access);
             setProducts(elements);
+            setLoading(false);
         }
         getData();
     }, [])
+
     return (
         <div className="flex flex-col items-center justify-center m-14">
             <table className="w-full">
                 <ListHeader />
                 <tbody>
-                    {products?.map(product => <ProductComponent product={product} />)}
+                    {products &&
+                        products?.map(product => <ProductComponent product={product} />)}
                 </tbody>
             </table>
+            {loading === true &&
+                <LoadingComponent />
+            }
         </div>
     )
 }
