@@ -1,5 +1,3 @@
-import Category from "./Category"
-
 export interface Product{
     product_id?: number,
     category_id?: number,

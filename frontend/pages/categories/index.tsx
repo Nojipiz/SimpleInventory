@@ -62,7 +62,7 @@ function CategoriesList(): ReactElement {
 function ListHeader(): ReactElement {
     const lineStyle: string = "font-normal text-1xl";
     return (
-        <thead>
+        <thead className="sticky top-0">
             <tr className="table-auto">
                 <th className={lineStyle}>
                     ID

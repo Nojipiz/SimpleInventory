@@ -5,7 +5,7 @@ import useAuth from "../hooks/useAuth";
 
 export default function NavBar(): ReactElement {
   return (
-    <footer className="flex absolute w-screen bottom-0 bg-black justify-between">
+    <footer className="flex fixed w-screen bottom-0 bg-black justify-between">
       <ul className="flex flex-row text-white font-bold text-1xl">
         <HomeButton />
         <BillsButton />
@@ -91,7 +91,7 @@ function ReportsButton(): ReactElement {
 function LogoutButton(): ReactElement {
   const { logout } = useAuth();
   return (
-    <li className="flex flex-col items-center justify-center p-3 ml-2 cursor-pointer" onClick={() => logout()}>
+    <li className="flex flex-col items-center justify-center p-3 mr-2 cursor-pointer" onClick={() => logout()}>
       <Icon.BoxArrowRight size={20} />
       <a>Salir</a>
     </li>

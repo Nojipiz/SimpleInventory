@@ -45,6 +45,7 @@ function Header(): ReactElement {
 
 
 function ProductsList(): ReactElement {
+    const { isOpen } = useContext(AddProductContext);
     const [products, setProducts] = useState<Product[]>();
     const [loading, setLoading] = useState<boolean>();
     const { token } = useAuth();
@@ -57,7 +58,7 @@ function ProductsList(): ReactElement {
             setLoading(false);
         }
         getData();
-    }, [])
+    }, [, isOpen]);
 
     return (
         <div className="flex flex-col items-center justify-center m-14">
@@ -76,13 +77,10 @@ function ProductsList(): ReactElement {
 }
 
 function ListHeader(): ReactElement {
-    const lineStyle: string = "font-normal text-1xl";
+    const lineStyle: string = "font-normal text-1xl bg-white";
     return (
-        <thead>
+        <thead className="sticky top-0">
             <tr className="table-auto">
-                <th className={lineStyle}>
-                    Codigo
-                </th>
                 <th className={lineStyle}>
                     Nombre
                 </th>
@@ -107,9 +105,6 @@ function ProductComponent(props: ProductProps): ReactElement {
     const lineStyle: string = "font-normal text-1xl text-center pt-3 pb-3";
     return (
         <tr className="shadow-md rounded">
-            <td className={lineStyle}>
-                {props.product.product_id}
-            </td>
             <td className={lineStyle}>
                 {props.product.product_name}
             </td>
