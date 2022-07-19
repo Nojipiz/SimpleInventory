@@ -75,6 +75,7 @@ CORS_ORIGIN_WHITELIST = (
     'http://localhost:8000',
     'https://simpleinventorybackend.herokuapp.com',
     'http://localhost:3000',
+    'https://simple-inventory-inky.vercel.app',
 )
 
 CORS_ALLOW_CREDENTIALS = True
