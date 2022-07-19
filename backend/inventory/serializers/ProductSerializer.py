@@ -1,19 +1,26 @@
 from rest_framework import serializers
 
-from .CategorySerializer import CategorySerializer
 from ..models import Products, CategoryProducts
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    category = CategorySerializer()
+    category_id = serializers.IntegerField(source='category.category_id')
 
     class Meta:
         model = Products
-        fields = ['product_id', 'category', 'product_name', 'product_description', 'product_units',
-                  'product_price', 'product_status']
+        fields = ['product_name', 'product_description',
+                  'product_units',
+                  'product_price', 'product_status', 'category_id']
 
     def create(self, validated_data):
-        category_data = validated_data.pop('category')
-        category_data = CategoryProducts.objects.create(**category_data)
-        product_instance = Products.objects.create(category=category_data, **validated_data)
-        return product_instance
+        category = validated_data.pop('category')
+        try:
+            category_instance = CategoryProducts.objects.get(
+                category_id=category['category_id']
+            )
+            product_instance = Products.objects.create(category=category_instance, **validated_data)
+            # product_instance = Products(category=category_instance, **validated_data)
+            # product_instance.save()
+            return product_instance
+        except CategoryProducts.DoesNotExist:
+            raise serializers.ValidationError('Category does not exist')

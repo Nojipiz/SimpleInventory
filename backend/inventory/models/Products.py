@@ -12,8 +12,10 @@ from .CategoryProducts import CategoryProducts
         product_price: The price of the product.
         product_status: The status of the product.
 """
+
+
 class Products(models.Model):
-    product_id = models.IntegerField(primary_key=True)
+    product_id = models.BigAutoField(primary_key=True)
     category = models.ForeignKey(CategoryProducts, models.DO_NOTHING)
     product_name = models.CharField(max_length=45)
     product_description = models.CharField(max_length=45)
@@ -26,5 +28,3 @@ class Products(models.Model):
     class Meta:
         managed = True
         db_table = 'products'
-
-
