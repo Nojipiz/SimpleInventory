@@ -22,13 +22,10 @@ export default function CreateProduct(): ReactElement {
     const handleSubmit = async (e:FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if(product === undefined) return;
-        //remove this
-        product.product_id = 123;
-        product.product_status = true;
-        //this
-        const successfull = await createProduct(token?.access, product);
-        if(successfull)
-            setOpen(false)
+        await createProduct(token?.access, product).
+        then(() => {
+            setOpen(false);
+        });
     }
 
     useEffect(() => {
@@ -76,7 +73,7 @@ export default function CreateProduct(): ReactElement {
                         {categories &&
                             <CategorySelector categories={categories} handleChange={(categoryId:string) => {
                                 const category = categories.find(cat => cat.category_id.toString() === categoryId);
-                                const updatedProduct = {...product, category:category};
+                                const updatedProduct = {...product, category_id:Number(categoryId)};
                                 setProduct(updatedProduct);
                             }}/>
                         }
@@ -94,12 +91,13 @@ export default function CreateProduct(): ReactElement {
 function CategorySelector(props:Props):ReactElement{
     const handleChange = (event:any) => {
         const selected = event.target.value;
+        console.log("seleccionado" + selected);
         props.handleChange(selected);
     }
     return (
         <select className="w-full rounded-full p-1 pl-2 pr-2 bg-gray-1 text-center outline-none" id="category" name="category" onChange={handleChange}>
             {props.categories.map(cat =>
-                <option value={cat.category_id}>
+                <option key={cat.category_id} value={cat.category_id}>
                      {cat.category_name}
                  </option>)}
         </select>

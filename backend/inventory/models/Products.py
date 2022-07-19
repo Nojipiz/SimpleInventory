@@ -21,7 +21,7 @@ class Products(models.Model):
     product_description = models.CharField(max_length=45)
     product_units = models.CharField(max_length=45)
     product_price = models.TextField()  # This field type is a guess.
-    product_status = models.BooleanField()
+    product_status = models.BooleanField(default=True)
 
     objects = models.Manager()
 
