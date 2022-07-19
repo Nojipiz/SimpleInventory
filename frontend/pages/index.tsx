@@ -1,11 +1,8 @@
-import type { NextPage } from 'next'
+import { ReactElement } from "react";
+import LoadingScreen from "../components/LoadingScreen";
 
-const Home: NextPage = () => {
-  return (
-    <h1 className="text-3xl font-bold underline">
-      Hi mom!
-    </h1>
+export default function MainPage():ReactElement{
+    return (
+      <LoadingScreen/>
   )
 }
-
-export default Home
