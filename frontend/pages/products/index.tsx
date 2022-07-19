@@ -66,7 +66,7 @@ function ProductsList(): ReactElement {
                 <ListHeader />
                 <tbody>
                     {products &&
-                        products?.map(product => <ProductComponent product={product} />)}
+                     products?.map((product,index) => <ProductComponent product={product} key={index}/>)}
                 </tbody>
             </table>
             {loading === true &&
