@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from "react";
+import { FormEvent, ReactElement, useEffect, useState } from "react";
 import ActionButton from "../../components/ActionButton";
 import * as Icon from "react-bootstrap-icons";
 import InputElement from "../../components/InputElement";
@@ -35,7 +35,8 @@ function LoginBoxContainer(): ReactElement {
     const [credentials, setCredentials] = useState<LoginCredentials>();
     const { login, isLoading } = useAuth();
     const [loadingNext, setLoadingNext] = useState<boolean>(false);
-    const handleSubmit = async (e: any) => {
+    const handleChange = ({ target: { name, value } }: any) => setCredentials({ ...credentials, [name]: value});
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoadingNext(true);
         await login(credentials?.username, credentials?.password);
@@ -46,18 +47,12 @@ function LoginBoxContainer(): ReactElement {
             <h1 className="w-11/12 font-bold mb-10">Ingresar</h1>
             <form method="post" id="login" className="flex flex-col items-center justify-center w-11/12" onSubmit={handleSubmit}>
                 <label className="w-full font-bold mb-2">Usuario</label>
-                <InputElement required={true} type="text" name="user" placeHolder="tuusuario@proveedor.com" defaultValue=""
-                    onChange={(text: string) => {
-                        const updated: LoginCredentials = { username: text, password: credentials?.password };
-                        setCredentials(updated);
-                    }} />
+                <InputElement required={true} type="text" name="username" placeHolder="tuusuario@proveedor.com" defaultValue=""
+                    onChange={handleChange} />
                 <span className="h-5"> </span>
                 <label className="w-full font-bold mb-2">Contraseña</label>
                 <InputElement required={true} type="password" name="password" placeHolder="*******" defaultValue=""
-                    onChange={(text: string) => {
-                        const updated: LoginCredentials = { username: credentials?.username, password: text };
-                        setCredentials(updated);
-                    }} />
+                    onChange={handleChange} />
                 <span className="h-5"> </span>
                 {isLoading == true || loadingNext == true ?
                     <Icon.ArrowRepeat className="animate-spin text-green-2 h-20" /> :
@@ -69,6 +64,6 @@ function LoginBoxContainer(): ReactElement {
 }
 
 interface LoginCredentials {
-    username: string | undefined;
-    password: string | undefined;
+    username?: string;
+    password?: string;
 }

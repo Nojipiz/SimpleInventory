@@ -19,8 +19,6 @@ class ProductSerializer(serializers.ModelSerializer):
                 category_id=category['category_id']
             )
             product_instance = Products.objects.create(category=category_instance, **validated_data)
-            # product_instance = Products(category=category_instance, **validated_data)
-            # product_instance.save()
             return product_instance
         except CategoryProducts.DoesNotExist:
             raise serializers.ValidationError('Category does not exist')
