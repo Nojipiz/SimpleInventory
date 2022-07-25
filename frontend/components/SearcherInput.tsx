@@ -4,7 +4,6 @@ import * as Icon from "react-bootstrap-icons";
 export default function SearchserInput(props: Props): ReactElement {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const text = e.target.value;
-    console.log(text);
     props.onSearch(text ? text : "");
   }
   return (
@@ -14,10 +13,9 @@ export default function SearchserInput(props: Props): ReactElement {
         <input className="border-none outline-none"
           type="text" name="search"
           placeholder={props.placeholder} onChange={handleChange} />
-        <button className="flex align-center justify-center mr-3"
-          onClick={() => { }}>
+        <div className="flex align-center justify-center mr-3 text-gray-2">
           <Icon.Search size={20} />
-        </button>
+        </div>
       </div>
     </div >
   )
