@@ -6,7 +6,7 @@ import Modal from "../../components/Modal";
 import * as Icon from "react-bootstrap-icons";
 import { Product } from "../../models/Product";
 import Category from "../../models/Category";
-import getAllCategories from "../api/Categories";
+import { getAllCategories } from "../api/Categories";
 import useAuth from "../../hooks/useAuth";
 import { createProduct } from "../api/Products";
 import LoadingComponent from "../../components/LoadingComponent";
