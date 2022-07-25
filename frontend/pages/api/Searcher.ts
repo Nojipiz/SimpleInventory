@@ -1,13 +1,13 @@
 export const getSearchOptions = (keywords: string[]): Object => {
   return {
     isCaseSensitive: false,
-    // includeScore: false,
-    // shouldSort: true,
-    // includeMatches: false,
+    shouldSort: true,
+    threshold: 0.3,
+    //includeMatches: true,
     // findAllMatches: false,
+    // includeScore: false,
     // minMatchCharLength: 1,
     // location: 0,
-    // threshold: 0.6,
     // distance: 100,
     // useExtendedSearch: false,
     // ignoreLocation: false,
