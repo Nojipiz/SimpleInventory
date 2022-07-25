@@ -103,7 +103,7 @@ function ProductsList(): ReactElement {
   }, [, isOpen]);
 
   return (
-    <div className="flex flex-col items-center justify-center m-14">
+    <div className="flex flex-col items-center justify-center m-14 mb-20">
       <table className="w-full">
         <ListHeader />
         <tbody>
