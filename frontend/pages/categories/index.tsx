@@ -48,6 +48,8 @@ function CategoriesList(): ReactElement {
   const [loading, setLoading] = useState<boolean>();
   const { token } = useAuth();
   useEffect(() => {
+    if (isOpen) document.body.style.overflow = "hidden";
+    else document.body.style.overflow = "";
     const getData = async () => {
       setLoading(true);
       const elements = await getAllCategories(token?.access);
@@ -62,7 +64,7 @@ function CategoriesList(): ReactElement {
         <ListHeader />
         <tbody>
           {products &&
-            products?.map(product => <ProductComponent key={product.category_id} product_category={product} />)}
+            products?.map((product, index) => <ProductComponent key={index} product_category={product} />)}
         </tbody>
       </table>
       {loading === true &&
