@@ -34,6 +34,7 @@ export default function CreateProduct(): ReactElement {
     const updatedCategories = async () => {
       const result = await getAllCategories(token?.access);
       setCategories(result);
+      setProduct({ ...product, category_id: result[0].category_id });
     }
     updatedCategories()
   }, []);
@@ -74,7 +75,6 @@ export default function CreateProduct(): ReactElement {
             <label>Categoria</label>
             {categories &&
               <CategorySelector categories={categories} handleChange={(categoryId: string) => {
-                const category = categories.find(cat => cat.category_id.toString() === categoryId);
                 const updatedProduct = { ...product, category_id: Number(categoryId) };
                 setProduct(updatedProduct);
               }} />
