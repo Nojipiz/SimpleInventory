@@ -7,7 +7,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CategoryProducts
-        fields = ['category_id', 'category_name', 'category_description']
+        fields = ['category_name', 'category_description']
 
     def create(self, validated_data):
         category_instance = CategoryProducts.objects.create(**validated_data)
