@@ -96,13 +96,12 @@ export default function CreateProduct(): ReactElement {
 function CategorySelector(props: Props): ReactElement {
   const handleChange = (event: any) => {
     const selected = event.target.value;
-    console.log("seleccionado" + selected);
     props.handleChange(selected);
   }
   return (
     <select className="w-full rounded-full p-1 pl-2 pr-2 bg-gray-1 text-center outline-none" id="category" name="category" onChange={handleChange}>
-      {props.categories.map(cat =>
-        <option key={cat.category_id} value={cat.category_id}>
+      {props.categories.map((cat, index) =>
+        <option key={index} value={cat.category_id}>
           {cat.category_name}
         </option>)}
     </select>

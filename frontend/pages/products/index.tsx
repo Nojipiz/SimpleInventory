@@ -38,11 +38,9 @@ export default function Productos(): ReactElement {
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
 
   const searchHandler = async (keyword: string) => {
-    console.log("Searching..." + keyword)
     const fuse = new Fuse<Product>(allProducts, getSearchOptions(["product_name"]));
     const searchResult: Fuse.FuseResult<Product>[] = fuse.search(keyword);
     const resultsList: Product[] = searchResult.map(({ item }) => item);
-    console.log("Res" + resultsList)
     setFilteredProducts(resultsList);
   }
 
@@ -63,11 +61,21 @@ export default function Productos(): ReactElement {
 
 function Header(): ReactElement {
   const { setOpen } = useContext(AddProductContext);
-  const { search } = useContext(SearchProductContext);
+  const { search, allProducts } = useContext(SearchProductContext);
+  const [lastSearch, setLastSearch] = useState<string>("");
+
+  useEffect(() => {
+    if (!lastSearch) return;
+    search(lastSearch);
+  }, [allProducts]);
+
   return (
     <header className="flex flex-row m-5 justify-between tablet:flex-col">
       <h1 className="font-bold text-2xl">Productos</h1>
-      <SearchserInput placeholder="Busca los productos aqui" onSearch={(text: string) => search(text)} />
+      <SearchserInput placeholder="Busca los productos aqui" onSearch={(text: string) => {
+        setLastSearch(text);
+        search(text);
+      }} />
       <div className="w-100">
         <ActionButton onClick={() => setOpen(true)} text="Crear Producto" dark={false} preventDefault={false} />
       </div>
@@ -83,6 +91,8 @@ function ProductsList(): ReactElement {
   const { token } = useAuth();
 
   useEffect(() => {
+    if (isOpen) document.body.style.overflow = "hidden";
+    else document.body.style.overflow = "";
     const getData = async () => {
       setLoading(true);
       const elements = await getAllProducts(token?.access);
