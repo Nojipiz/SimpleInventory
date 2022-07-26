@@ -2,12 +2,7 @@ from django.db import models
 
 from ..models import Employees
 from ..models.Products import Products
-from ..models.Clients import Customers
-
-
-
-
-
+from ..models.Customers import Customers
 
 class Sale(models.Model):
     sale_id = models.IntegerField(primary_key=True)

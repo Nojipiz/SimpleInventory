@@ -12,6 +12,6 @@ router = DefaultRouter()
 router.register(r'employees', EmployeeController, basename="employees")
 router.register(r'category-products', CategoryProductsController, basename="category-products")
 router.register(r'products', ProductController, basename="products")
-router.register(r'clients', CustomerController, basename="clients")
+router.register(r'customers', CustomerController, basename="customers")
 
 urlpatterns = router.urls
