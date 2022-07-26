@@ -9,7 +9,7 @@ export default function NavBar(): ReactElement {
       <ul className="flex flex-row text-white font-bold text-1xl">
         <HomeButton />
         <BillsButton />
-        <ClientsButton />
+        <CustomersButton />
         <ProductsButton />
         <ProductsCategoryButton />
         <ReportsButton />
@@ -43,9 +43,9 @@ function BillsButton(): ReactElement {
   );
 }
 
-function ClientsButton(): ReactElement {
+function CustomersButton(): ReactElement {
   return (
-    <Link href={"/clients"}>
+    <Link href={"/customers"}>
       <li className="flex flex-col items-center justify-center p-3 ml-2 cursor-pointer">
         <Icon.People size={20} />
         <a>Clientes</a>
