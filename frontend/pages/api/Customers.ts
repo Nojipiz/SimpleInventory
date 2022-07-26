@@ -2,7 +2,7 @@ import Customer from "../../models/Customer";
 import { API_URL } from "./Constants";
 
 export async function getAllCustomers(authToken: string | undefined): Promise<Customer[]> {
-  const result = await fetch(API_URL + '/clients/', {
+  const result = await fetch(API_URL + '/customers/', {
     method: "GET",
     headers: {
       "Content-Type": "none",
@@ -16,7 +16,7 @@ export async function getAllCustomers(authToken: string | undefined): Promise<Cu
 export async function createCustomer(authToken: string = "", customer: Customer): Promise<boolean> {
   customer.customer_id = 12
   const body = JSON.stringify(customer);
-  const request = await fetch(API_URL + "/client/", {
+  const request = await fetch(API_URL + "/customers/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -3,8 +3,7 @@ export default interface Customer {
   type_person?: number,
   type_document?: number,
   customer_name?: string,
-  category_description?: string,
   customer_last_name?: string,
   customer_phone?: string,
-  customer_email?:String
+  customer_email?: String
 }
