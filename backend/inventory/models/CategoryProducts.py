@@ -13,7 +13,7 @@ from django.db import models
 
 
 class CategoryProducts(models.Model):
-    category_id = models.IntegerField(primary_key=True)
+    category_id = models.BigAutoField(primary_key=True)
     category_name = models.CharField(max_length=45)
     category_description = models.CharField(max_length=45)
 
