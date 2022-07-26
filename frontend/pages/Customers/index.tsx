@@ -8,7 +8,6 @@ import useAuth from "../../hooks/useAuth";
 import Customer from "../../models/Customer";
 import { getAllCustomers } from "../api/Customers";
 import { getSearchOptions } from "../api/Searcher";
-import CreateCustomer from "./CreateCustomer";
 
 //export const AddCategoryContext = createContext<ContextModal>({ isOpen: false, setOpen: () => { } });
 //const SearchCategoriesContext = createContext<SearchContext>(
@@ -65,8 +64,7 @@ export default function Customers(): ReactElement {
 
   return (
     <AddCustomerContext.Provider value={{ isOpen: addCustomerOpen, setOpen: setAddCustomerOpne }}>
-      {addCustomerOpen === true &&
-        <CreateCustomer />
+      {addCustomerOpen === true 
       }
       <SearchCustomerContext.Provider value={{ search: searchHandler, allCustomers: allCustomers, setAllCustomer: setAllCustomers, filteredCustomer: filteredCustomers }}>
         <Header />
