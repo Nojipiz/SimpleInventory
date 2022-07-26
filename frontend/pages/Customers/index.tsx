@@ -9,15 +9,6 @@ import Customer from "../../models/Customer";
 import { getAllCustomers } from "../api/Customers";
 import { getSearchOptions } from "../api/Searcher";
 
-//export const AddCategoryContext = createContext<ContextModal>({ isOpen: false, setOpen: () => { } });
-//const SearchCategoriesContext = createContext<SearchContext>(
- // {
-   // allCategories: [],
- //   setAllCategories: () => { },
-  //  search: () => { },
-  //  filteredCategories: []
- // }
-//);
 export const AddCustomerContext = createContext<ContextModal>({ isOpen: false, setOpen: () => { } });
 const SearchCustomerContext = createContext<SearchContext>(
   {
@@ -27,21 +18,12 @@ const SearchCustomerContext = createContext<SearchContext>(
     filteredCustomer: []
   }
 );
-//interface ContextModal {
-//  isOpen: boolean,
-//  setOpen: Function
-//}
+
 interface ContextModal {
   isOpen: boolean,
   setOpen: Function
 }
 
-//interface SearchContext {
-//  allCategories: Category[];
-//  setAllCategories: (categories: Category[]) => void;
-//  search: (keyword: string) => void;
-//  filteredCategories: Category[];
-//}
 interface SearchContext {
   allCustomers: Customer[];
   setAllCustomer: (customers: Customer[]) => void;
