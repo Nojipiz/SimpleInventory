@@ -14,7 +14,7 @@ export async function getAllCustomers(authToken: string | undefined): Promise<Cu
 }
 
 export async function createCustomer(authToken: string = "", customer: Customer): Promise<boolean> {
-  customer.customer_id = 12
+  customer.customer_id = Number(customer.customer_id);
   const body = JSON.stringify(customer);
   const request = await fetch(API_URL + "/customers/", {
     method: "POST",

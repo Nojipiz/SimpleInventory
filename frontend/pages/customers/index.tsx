@@ -148,7 +148,6 @@ function ListHeader(): ReactElement {
 
 function CustomerComponent(props: CustomerProps): ReactElement {
   const lineStyle: string = "font-normal text-1xl text-center pt-3 pb-3";
-  console.log(props.customer)
   return (
     <tr className="shadow-md rounded">
       <td className={lineStyle}>
