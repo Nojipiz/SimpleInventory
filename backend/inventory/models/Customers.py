@@ -13,7 +13,7 @@ from django.db import models
 """
 
 class Customers(models.Model):
-    customer_id = models.IntegerField(primary_key=True)
+    customer_id = models.BigIntegerField(primary_key=True)
     type_person = models.ForeignKey('TypePerson', models.DO_NOTHING)
     type_document = models.ForeignKey('TypeDocument', models.DO_NOTHING)
     customer_name = models.CharField(max_length=45)
