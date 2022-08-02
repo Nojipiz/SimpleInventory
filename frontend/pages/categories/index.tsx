@@ -6,11 +6,13 @@ import NavBar from "../../components/NavBar";
 import SearchserInput from "../../components/SearcherInput";
 import useAuth from "../../hooks/useAuth";
 import Category from "../../models/Category";
-import { getAllCategories } from "../api/Categories";
+import { deleteCategory, getAllCategories } from "../api/Categories";
 import { getSearchOptions } from "../api/Searcher";
 import CreateCategory from "./CreateCategory";
+import * as Icon from "react-bootstrap-icons";
 
 export const AddCategoryContext = createContext<ContextModal>({ isOpen: false, setOpen: () => { } });
+const ReloadCategoriesContext = createContext<ReloadContext>({ reload: false, setReload: () => { } });
 const SearchCategoriesContext = createContext<SearchContext>(
   {
     allCategories: [],
@@ -19,6 +21,11 @@ const SearchCategoriesContext = createContext<SearchContext>(
     filteredCategories: []
   }
 );
+
+interface ReloadContext {
+  reload: boolean;
+  setReload: Function
+}
 
 interface ContextModal {
   isOpen: boolean,
@@ -36,6 +43,7 @@ export default function Categories(): ReactElement {
   const [addCategoryOpen, setAddCategoryOpen] = useState<boolean>(false);
   const [allCategories, setAllCategories] = useState<Category[]>([]);
   const [filteredCategories, setFilteredCategories] = useState<Category[]>([]);
+  const [reloadCategories, setReloadCategories] = useState<boolean>(false);
 
   const searchHandler = async (keyword: string) => {
     const fuse = new Fuse<Category>(allCategories, getSearchOptions(["category_name"]));
@@ -51,7 +59,9 @@ export default function Categories(): ReactElement {
       }
       <SearchCategoriesContext.Provider value={{ search: searchHandler, allCategories: allCategories, setAllCategories: setAllCategories, filteredCategories: filteredCategories }}>
         <Header />
-        <CategoriesList />
+        <ReloadCategoriesContext.Provider value={{ reload: reloadCategories, setReload: setReloadCategories }}>
+          <CategoriesList />
+        </ReloadCategoriesContext.Provider>
         <NavBar />
       </SearchCategoriesContext.Provider>
     </AddCategoryContext.Provider>
@@ -86,20 +96,22 @@ function Header(): ReactElement {
 function CategoriesList(): ReactElement {
   const { allCategories, setAllCategories, filteredCategories } = useContext(SearchCategoriesContext);
   const { isOpen } = useContext(AddCategoryContext);
+  const { reload } = useContext(ReloadCategoriesContext);
   const [loading, setLoading] = useState<boolean>();
   const { token } = useAuth();
+
+  const loadDataHandler = async () => {
+    setLoading(true);
+    const elements = await getAllCategories(token?.access);
+    setAllCategories(elements);
+    setLoading(false);
+  }
 
   useEffect(() => {
     if (isOpen) document.body.style.overflow = "hidden";
     else document.body.style.overflow = "";
-    const getData = async () => {
-      setLoading(true);
-      const elements = await getAllCategories(token?.access);
-      setAllCategories(elements);
-      setLoading(false);
-    }
-    getData();
-  }, [, isOpen]);
+    loadDataHandler();
+  }, [, isOpen, reload]);
 
   return (
     <div className="flex flex-col items-center justify-center m-14 mb-20">
@@ -107,9 +119,9 @@ function CategoriesList(): ReactElement {
         <ListHeader />
         <tbody>
           {filteredCategories.length > 0 ?
-            filteredCategories?.map((product, index) => <CategoryComponent key={index} categories={product} />) :
+            filteredCategories?.map((product, index) => <CategoryComponent key={index} category={product} />) :
             (allCategories &&
-              allCategories?.map((product, index) => <CategoryComponent key={index} categories={product} />))
+              allCategories?.map((product, index) => <CategoryComponent key={index} category={product} />))
           }
         </tbody>
       </table>
@@ -131,6 +143,12 @@ function ListHeader(): ReactElement {
         <th className={lineStyle}>
           Descripcion
         </th>
+        <th className={lineStyle}>
+          Borrar
+        </th>
+        <th className={lineStyle}>
+          Editar
+        </th>
       </tr>
     </thead>
   )
@@ -138,18 +156,35 @@ function ListHeader(): ReactElement {
 
 function CategoryComponent(props: CategoryProps): ReactElement {
   const lineStyle: string = "font-normal text-1xl text-center pt-3 pb-3";
+  const { reload, setReload } = useContext(ReloadCategoriesContext);
+  const { token } = useAuth();
   return (
     <tr className="shadow-md rounded">
       <td className={lineStyle}>
-        {props.categories.category_name}
+        {props.category.category_name}
       </td>
       <td className={lineStyle}>
-        {props.categories.category_description}
+        {props.category.category_description}
+      </td>
+      <td className={lineStyle}>
+        <button className="items-center justify-center"
+          onClick={async () => {
+            await deleteCategory(token?.access, props.category.category_id);
+            setReload(!reload);
+          }}>
+          <Icon.Trash size={28} className={"text-black hover:scale-105"} />
+        </button>
+      </td>
+      <td className={lineStyle}>
+        <button className="items-center justify-center"
+          onClick={() => console.log("Editar")}>
+          <Icon.PencilSquare size={28} className={"text-black hover:scale-105"} />
+        </button>
       </td>
     </tr>
   )
 }
 
 interface CategoryProps {
-  categories: Category
+  category: Category
 }
