@@ -12,7 +12,7 @@ import CreateCustomer from "./CreateCustomer";
 import * as Icon from "react-bootstrap-icons";
 
 export const AddCustomerContext = createContext<ContextModal>({ isOpen: false, setOpen: () => { } });
-const ReloadCustomersList = createContext<ReloadContext>({ reload: false, setReload: () => { } });
+const ReloadCustomersContext = createContext<ReloadContext>({ reload: false, setReload: () => { } });
 const SearchCustomerContext = createContext<SearchContext>(
   {
     allCustomers: [],
@@ -60,9 +60,9 @@ export default function Customers(): ReactElement {
       }
       <SearchCustomerContext.Provider value={{ search: searchHandler, allCustomers: allCustomers, setAllCustomer: setAllCustomers, filteredCustomer: filteredCustomers }}>
         <Header />
-        <ReloadCustomersList.Provider value={{ reload: reloadCustomers, setReload: setReloadCustomers }}>
+        <ReloadCustomersContext.Provider value={{ reload: reloadCustomers, setReload: setReloadCustomers }}>
           <CustomerList />
-        </ReloadCustomersList.Provider>
+        </ReloadCustomersContext.Provider>
         <NavBar />
       </SearchCustomerContext.Provider>
     </AddCustomerContext.Provider>
@@ -96,7 +96,7 @@ function Header(): ReactElement {
 function CustomerList(): ReactElement {
   const { allCustomers, setAllCustomer, filteredCustomer } = useContext(SearchCustomerContext);
   const { isOpen } = useContext(AddCustomerContext);
-  const { reload } = useContext(ReloadCustomersList);
+  const { reload } = useContext(ReloadCustomersContext);
   const [loading, setLoading] = useState<boolean>();
   const { token } = useAuth();
 
@@ -166,8 +166,9 @@ function ListHeader(): ReactElement {
 
 function CustomerComponent(props: CustomerProps): ReactElement {
   const lineStyle: string = "font-normal text-1xl text-center pt-3 pb-3 justify-center items-center";
-  const { reload, setReload } = useContext(ReloadCustomersList);
+  const { reload, setReload } = useContext(ReloadCustomersContext);
   const { token } = useAuth();
+
   return (
     <tr className="shadow-md rounded">
       <td className={lineStyle}>
