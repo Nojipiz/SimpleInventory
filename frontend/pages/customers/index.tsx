@@ -47,7 +47,7 @@ export default function Customers(): ReactElement {
   const [reloadCustomers, setReloadCustomers] = useState<boolean>(false);
 
   const searchHandler = async (keyword: string) => {
-    const fuse = new Fuse<Customer>(allCustomers, getSearchOptions(["customer_name"]));
+    const fuse = new Fuse<Customer>(allCustomers, getSearchOptions(["customer_id", "customer_name", "customer_last_name"]));
     const searchResult: Fuse.FuseResult<Customer>[] = fuse.search(keyword);
     const resultsList: Customer[] = searchResult.map(({ item }) => item);
     setFilteredCustomers(resultsList);
