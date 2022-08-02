@@ -24,3 +24,5 @@ class Customers(models.Model):
     class Meta:
         managed = True
         db_table = 'customers'
+
+    objects = models.Manager()
