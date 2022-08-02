@@ -28,3 +28,13 @@ export async function createCategory(authToken: string = "", category: Category)
   return category === response;
 }
 
+export async function deleteCategory(authToken: string = "", categoryId: number | undefined): Promise<boolean> {
+  const request = await fetch(API_URL + `/category-products/${categoryId}/`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "none",
+      'Authorization': 'Bearer ' + authToken
+    },
+  });
+  return request.type.toString() !== "";
+}

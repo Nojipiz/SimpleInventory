@@ -8,7 +8,6 @@ export async function getAllCustomers(authToken: string | undefined): Promise<Cu
       "Content-Type": "none",
       'Authorization': 'Bearer ' + authToken
     }
-
   });
   return await result.json() as Customer[];
 }
@@ -28,3 +27,13 @@ export async function createCustomer(authToken: string = "", customer: Customer)
   return customer === response;
 }
 
+export async function deleteCustomer(authToken: string = "", customerId: number | undefined): Promise<boolean> {
+  const request = await fetch(API_URL + `/customers/${customerId}/`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "none",
+      'Authorization': 'Bearer ' + authToken
+    },
+  });
+  return request.type.toString() !== "";
+}
