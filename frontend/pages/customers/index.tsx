@@ -6,11 +6,13 @@ import NavBar from "../../components/NavBar";
 import SearchserInput from "../../components/SearcherInput";
 import useAuth from "../../hooks/useAuth";
 import Customer from "../../models/Customer";
-import { getAllCustomers } from "../api/Customers";
+import { deleteCustomer, getAllCustomers } from "../api/Customers";
 import { getSearchOptions } from "../api/Searcher";
 import CreateCustomer from "./CreateCustomer";
+import * as Icon from "react-bootstrap-icons";
 
 export const AddCustomerContext = createContext<ContextModal>({ isOpen: false, setOpen: () => { } });
+const ReloadCustomersList = createContext<ReloadContext>({ reload: false, setReload: () => { } });
 const SearchCustomerContext = createContext<SearchContext>(
   {
     allCustomers: [],
@@ -19,6 +21,11 @@ const SearchCustomerContext = createContext<SearchContext>(
     filteredCustomer: []
   }
 );
+
+interface ReloadContext {
+  reload: boolean;
+  setReload: Function
+}
 
 interface ContextModal {
   isOpen: boolean,
@@ -37,6 +44,7 @@ export default function Customers(): ReactElement {
   const [addCustomerOpen, setAddCustomerOpne] = useState<boolean>(false);
   const [allCustomers, setAllCustomers] = useState<Customer[]>([]);
   const [filteredCustomers, setFilteredCustomers] = useState<Customer[]>([]);
+  const [reloadCustomers, setReloadCustomers] = useState<boolean>(false);
 
   const searchHandler = async (keyword: string) => {
     const fuse = new Fuse<Customer>(allCustomers, getSearchOptions(["customer_name"]));
@@ -52,7 +60,9 @@ export default function Customers(): ReactElement {
       }
       <SearchCustomerContext.Provider value={{ search: searchHandler, allCustomers: allCustomers, setAllCustomer: setAllCustomers, filteredCustomer: filteredCustomers }}>
         <Header />
-        <CustomerList />
+        <ReloadCustomersList.Provider value={{ reload: reloadCustomers, setReload: setReloadCustomers }}>
+          <CustomerList />
+        </ReloadCustomersList.Provider>
         <NavBar />
       </SearchCustomerContext.Provider>
     </AddCustomerContext.Provider>
@@ -86,20 +96,22 @@ function Header(): ReactElement {
 function CustomerList(): ReactElement {
   const { allCustomers, setAllCustomer, filteredCustomer } = useContext(SearchCustomerContext);
   const { isOpen } = useContext(AddCustomerContext);
+  const { reload } = useContext(ReloadCustomersList);
   const [loading, setLoading] = useState<boolean>();
   const { token } = useAuth();
+
+  const loadDataHandler = async () => {
+    setLoading(true);
+    const elements = await getAllCustomers(token?.access);
+    setAllCustomer(elements);
+    setLoading(false);
+  }
 
   useEffect(() => {
     if (isOpen) document.body.style.overflow = "hidden";
     else document.body.style.overflow = "";
-    const getData = async () => {
-      setLoading(true);
-      const elements = await getAllCustomers(token?.access);
-      setAllCustomer(elements);
-      setLoading(false);
-    }
-    getData();
-  }, [, isOpen]);
+    loadDataHandler();
+  }, [, isOpen, reload]);
 
   return (
     <div className="flex flex-col items-center justify-center m-14 mb-20">
@@ -139,6 +151,12 @@ function ListHeader(): ReactElement {
         <th className={lineStyle}>
           Email
         </th>
+        <th className={lineStyle}>
+          Borrar
+        </th>
+        <th className={lineStyle}>
+          Editar
+        </th>
       </tr>
     </thead>
   )
@@ -147,7 +165,9 @@ function ListHeader(): ReactElement {
 
 
 function CustomerComponent(props: CustomerProps): ReactElement {
-  const lineStyle: string = "font-normal text-1xl text-center pt-3 pb-3";
+  const lineStyle: string = "font-normal text-1xl text-center pt-3 pb-3 justify-center items-center";
+  const { reload, setReload } = useContext(ReloadCustomersList);
+  const { token } = useAuth();
   return (
     <tr className="shadow-md rounded">
       <td className={lineStyle}>
@@ -165,7 +185,23 @@ function CustomerComponent(props: CustomerProps): ReactElement {
       <td className={lineStyle}>
         {props.customer.customer_email}
       </td>
-    </tr>
+      <td className={lineStyle}>
+        <button className="items-center justify-center"
+          onClick={async () => {
+            await deleteCustomer(token?.access, props.customer.customer_id);
+            setReload(!reload);
+          }
+          }>
+          <Icon.Trash size={28} className={"text-black hover:scale-105"} />
+        </button>
+      </td>
+      <td className={lineStyle}>
+        <button className="items-center justify-center"
+          onClick={() => console.log("Editar")}>
+          <Icon.PencilSquare size={28} className={"text-black hover:scale-105"} />
+        </button>
+      </td>
+    </tr >
   )
 }
 
