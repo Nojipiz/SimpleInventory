@@ -1,8 +1,6 @@
 from rest_framework.routers import DefaultRouter
 
-from inventory.controllers.SalesController import SalesController
-
-
+from .controllers.SalesController import SalesController
 from .controllers.CategoryProductsController import CategoryProductsController
 from .controllers.EmployeeController import EmployeeController
 from .controllers.ProductController import ProductController

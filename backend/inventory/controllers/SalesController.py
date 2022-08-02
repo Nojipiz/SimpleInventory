@@ -1,6 +1,5 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-
 from inventory.models.Sales import Sales
 from inventory.serializers.SalesSerializer import SalesSerializer
 

@@ -1,5 +1,4 @@
 from rest_framework import serializers
-
 from inventory.models.Sales import Sales
 
 class SalesSerializer(serializers.ModelSerializer):
