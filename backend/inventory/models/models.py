@@ -16,23 +16,6 @@ class Sale(models.Model):
         db_table = 'sale'
 
 
-class SaleDescription(models.Model):
-    sale = models.OneToOneField(Sale, models.DO_NOTHING, primary_key=True)
-    product = models.ForeignKey(Products, models.DO_NOTHING)
-    description_id = models.IntegerField()
-    tax = models.ForeignKey('Taxes', models.DO_NOTHING, blank=True, null=True)
-    units = models.IntegerField()
-    quantity = models.IntegerField()
-    discount = models.TextField(blank=True, null=True)  # This field type is a guess.
-    total = models.TextField()  # This field type is a guess.
-
-    class Meta:
-        managed = True
-        db_table = 'sale_description'
-        unique_together = \
-            (('sale', 'product', 'description_id'), ('sale', 'product', 'description_id'),)
-
-
 class Taxes(models.Model):
     tax_id = models.IntegerField(primary_key=True)
     tax_name = models.CharField(max_length=45)
@@ -43,6 +26,21 @@ class Taxes(models.Model):
         managed = True
         db_table = 'taxes'
 
+class SaleDescription(models.Model):
+    sale_id = models.OneToOneField(Sale, models.DO_NOTHING, primary_key=True)
+    product_id = models.ForeignKey(Products, models.DO_NOTHING)
+    description_id = models.IntegerField()
+    tax_id = models.ForeignKey('Taxes', models.DO_NOTHING, blank=True, null=True)
+    units = models.IntegerField()
+    quantity = models.IntegerField()
+    discount = models.TextField(blank=True, null=True)  # This field type is a guess.
+    total = models.TextField()  # This field type is a guess.
+
+    class Meta:
+        managed = True
+        db_table = 'sale_description'
+        unique_together = \
+            (('sale_id', 'product_id', 'description_id'), ('sale_id', 'product_id', 'description_id'),)
 
 class TypeDocument(models.Model):
     type_document_id = models.IntegerField(primary_key=True)

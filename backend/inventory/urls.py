@@ -1,5 +1,6 @@
 from rest_framework.routers import DefaultRouter
 
+from .controllers.SaleDescriptionsController import SaleDescriptionsController
 from .controllers.TaxController import TaxController
 from .controllers.SalesController import SalesController
 from .controllers.CategoryProductsController import CategoryProductsController
@@ -20,6 +21,7 @@ router.register(r'customers', CustomerController, basename="customers")
 router.register(r'type-customer', TypePersonController, basename="type-customer")
 router.register(r'type-document', TypeDocumentController, basename="type-document")
 router.register(r'sales', SalesController, basename="sales")
+router.register(r'sales-descriptions', SaleDescriptionsController, basename="sales-descriptions")
 router.register(r'taxes', TaxController, basename="taxes")
 router.register(r'reports', ReportController, basename="reports")
 
