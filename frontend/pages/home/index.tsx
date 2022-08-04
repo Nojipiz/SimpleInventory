@@ -1,7 +1,6 @@
 import { ReactElement } from "react";
 import ActionButton from "../../components/ActionButton";
 import NavBar from "../../components/NavBar";
-import * as Icon from "react-bootstrap-icons";
 
 export default function Home(): ReactElement {
   return (
