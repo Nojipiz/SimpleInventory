@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from inventory.models.SaleDescriptions import SaleDescriptions
+from ..models import SaleDescriptions
 
 class SaleDescriptionSerializer(serializers.ModelSerializer):
     

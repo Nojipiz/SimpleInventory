@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from ..models import Taxes
 from ..serializers.TaxSerializer import TaxSerializer
 
+
 class TaxController(viewsets.ModelViewSet):
     serializer_class = TaxSerializer
     permission_classes = (IsAuthenticated,)
