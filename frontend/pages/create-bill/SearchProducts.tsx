@@ -24,7 +24,7 @@ interface SearchContext {
   filteredProducts: Product[];
 }
 
-export function SearchProductsModal(): ReactElement {
+export function SearchProducts(): ReactElement {
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
 

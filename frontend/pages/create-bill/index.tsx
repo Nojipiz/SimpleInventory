@@ -9,7 +9,8 @@ import TypeCustomer from "../../models/TypeCustomer";
 import TypeDocument from "../../models/TypeDocument";
 import { getAllTypeCustomers } from "../api/TypeCustomers";
 import { getAllTypeDocuments } from "../api/TypeDocuments";
-import { SearchProductsModal } from "./SearchProducts";
+import SearchCustomers from "./SearchCustomers";
+import { SearchProducts } from "./SearchProducts";
 
 export const ModalsContext = createContext<ModalsContextModel>(
   {
@@ -50,7 +51,7 @@ interface BillContextModel {
 
 export default function CreateBillPage(): ReactElement {
   const [searchProductsOpen, setSearchProductsOpen] = useState<boolean>(false);
-  const [searchClientOpen, setSearchClientOpen] = useState<boolean>(false);
+  const [searchCustomersOpen, setSearchCustomerOpen] = useState<boolean>(false);
 
   const [customer, setCustomer] = useState<Customer>({});
   const [products, setProducts] = useState<Product[]>([]);
@@ -60,8 +61,8 @@ export default function CreateBillPage(): ReactElement {
     <ModalsContext.Provider value={{
       searchProductsOpen: searchProductsOpen,
       setSearchProductsOpen: setSearchProductsOpen,
-      searchClientOpen: searchClientOpen,
-      setSearchClientOpen: setSearchClientOpen,
+      searchClientOpen: searchCustomersOpen,
+      setSearchClientOpen: setSearchCustomerOpen,
     }}>
       <BillContext.Provider value={
         {
@@ -69,9 +70,8 @@ export default function CreateBillPage(): ReactElement {
           products: products, setProducts: setProducts,
           descriptions: descriptions, setDescriptions: setDescriptions
         }}>
-        {searchProductsOpen &&
-          <SearchProductsModal />
-        }
+        {searchProductsOpen && <SearchProducts />}
+        {searchCustomersOpen && <SearchCustomers />}
         <PageContent />
       </BillContext.Provider >
       <NavBar />
