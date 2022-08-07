@@ -39,7 +39,7 @@ export async function deleteProduct(authToken: string = "", productId: number | 
 
 export async function updateProduct(authToken: string = "", product: Product, idProduct:string | number): Promise<boolean> {
   const body = JSON.stringify(product);
-  const request = await fetch("http://localhost:8000" + `/products/${idProduct}/`, {
+  const request = await fetch(API_URL + `/products/${idProduct}/`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
