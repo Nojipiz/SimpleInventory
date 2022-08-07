@@ -8,15 +8,18 @@ export default function InputElement(props: Props): ReactElement {
             placeholder={props.placeHolder}
             required={props.required} id={props.name}
             defaultValue={props.defaultValue}
-            onChange={(e:ChangeEvent<HTMLInputElement>) => props.onChange(e)} />
+            onChange={(e:ChangeEvent<HTMLInputElement>) => props.onChange(e)}
+            disabled={props.disable}
+        />
     )
 }
 
 interface Props {
-    type: string;
-    name: string;
-    placeHolder: string;
+    type?: string;
+    name?: string;
+    placeHolder?: string;
     onChange:(e:ChangeEvent<HTMLInputElement>) => void;
-    required: boolean;
-    defaultValue: string;
+    required?: boolean;
+    defaultValue?: string | number;
+    disable?: boolean;
 }
