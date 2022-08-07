@@ -101,6 +101,7 @@ export default function Customers(): ReactElement {
             filteredCustomer: filteredCustomers
           }}>
             <Header/>
+
             <CustomerList/>
 
             <NavBar/>

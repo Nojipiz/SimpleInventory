@@ -43,7 +43,7 @@ export default function EditCustomer({idCustomer}: any): ReactElement {
     await updateCustomer(token?.access, idCustomer, customer);
     setOpen(false);
     setLoading(false);
-    setReload(true);
+    setReload(!setReload);
   }
 
   const handleChange = ({target: {name, value}}: any) => {
@@ -65,7 +65,7 @@ export default function EditCustomer({idCustomer}: any): ReactElement {
             <InputElement type="number" name="customer_id"
                           placeHolder="Numero de identificación"
                           required={true} defaultValue={customer?.customer_id}
-                          onChange={handleChange}/>
+                          onChange={handleChange} disable/>
             <label>Tipo de documento</label>
             {typesDocument &&
               <TypesDocumentsSelect selectedType={customer?.type_document}
