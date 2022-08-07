@@ -13,10 +13,10 @@ export default function InputElement(props: Props): ReactElement {
 }
 
 interface Props {
-    type: string;
-    name: string;
-    placeHolder: string;
+    type?: string;
+    name?: string;
+    placeHolder?: string;
     onChange:(e:ChangeEvent<HTMLInputElement>) => void;
-    required: boolean;
-    defaultValue: string;
+    required?: boolean;
+    defaultValue?: string | number;
 }

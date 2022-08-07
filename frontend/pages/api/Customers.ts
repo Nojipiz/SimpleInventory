@@ -37,3 +37,30 @@ export async function deleteCustomer(authToken: string = "", customerId: number 
   });
   return request.type.toString() !== "";
 }
+
+
+export async function updateCustomer(authToken: string = "", idCustomer:number , customer: Customer): Promise<boolean> {
+  customer.customer_id = Number(customer.customer_id);
+  const body = JSON.stringify(customer);
+  const request = await fetch(API_URL + `/customers/${idCustomer}/`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer ' + authToken
+    },
+    body: body
+  });
+  const response = await request.json() as Customer;
+  return customer === response;
+}
+
+export async function getCustomer(authToken: string = "", customerId: number | undefined): Promise<Customer> {
+  const request = await fetch(API_URL + `/customers/${customerId}/`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "none",
+      'Authorization': 'Bearer ' + authToken
+    },
+  });
+  return await request.json() as Customer;
+}
