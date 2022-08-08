@@ -28,7 +28,7 @@ export async function createSale(authToken: string = "", sale: Sale): Promise<nu
 }
 
 export async function createSaleDescriptions(authToken: string = "", descriptions: SaleDescription[], saleId?: number) {
-  descriptions.forEach(description => {
+  descriptions.filter(description => description.total !== 0).forEach(description => {
     description.sale_id = saleId;
     createSaleDescription(authToken, description);
   }
@@ -36,9 +36,6 @@ export async function createSaleDescriptions(authToken: string = "", description
 }
 
 async function createSaleDescription(authToken: string = "", description: SaleDescription) {
-  description.tax_id = 1;
-  description.units = 100;
-  description.discount = 0;
   const body = JSON.stringify(description);
   const request = await fetch(API_URL + "/sales-descriptions/", {
     method: "POST",

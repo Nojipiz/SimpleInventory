@@ -111,10 +111,6 @@ function CustomerData(): ReactElement {
     getSelectElements();
   }, []);
 
-  useEffect(() => {
-    console.log("Main reload" + customer);
-  }, [customer]);
-
   const handleChange = ({ target: { name, value } }: any) => {
     setCustomer({ ...customer, [name]: value });
   };
@@ -284,7 +280,7 @@ function TableHeader(): ReactElement {
           Valor Unitario
         </th>
         <th className={lineStyle}>
-          Restantes
+          Valor Total
         </th>
       </tr>
     </thead>
@@ -294,9 +290,10 @@ function TableHeader(): ReactElement {
 function ProductComponent(props: ProductProps): ReactElement {
   const lineStyle: string = "font-normal text-1xl text-center pt-3 pb-3 ";
   const { descriptions, setDescriptions } = useContext(SaleContext);
+  const visibility = (props.description.quantity || 0) > 0 ? "opacity-100" : "opacity-20"
 
   return (
-    <tr className="shadow-md rounded">
+    <tr className={"shadow-md rounded " + visibility}>
       <td className={lineStyle + "w-1/12 pl-2"}>
         <InputElement
           type="number"
@@ -306,7 +303,9 @@ function ProductComponent(props: ProductProps): ReactElement {
             const index = descriptions.findIndex(description => description === props.description);
             const modifiedDescriptions = [...descriptions];
             const modifiedElement = props.description;
-            modifiedElement.quantity = Number(event.target.value);
+            const quantity = Number(event.target.value);
+            if (quantity < 0) return;
+            modifiedElement.quantity = quantity;
             modifiedElement.total = Number(props.product.product_price) * modifiedElement.quantity;
             modifiedDescriptions[index] = modifiedElement;
             setDescriptions(modifiedDescriptions);
@@ -325,9 +324,9 @@ function ProductComponent(props: ProductProps): ReactElement {
         {props.product.product_price}
       </td>
       <td className={lineStyle}>
-        {props.product.product_units}
+        {props.description.total}
       </td>
-    </tr>
+    </tr >
   )
 }
 

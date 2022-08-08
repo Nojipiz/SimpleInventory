@@ -82,7 +82,11 @@ function ProductComponent(props: ProductProps): ReactElement {
         setProducts([...products, props.product]);
         setDescriptions([...descriptions, {
           product_id: props.product.product_id,
-          quantity: 0
+          quantity: 1,
+          total: props.product.product_price,
+          units: props.product.product_units,
+          discount: 0,
+          tax_id: 1
         }]);
       }
       }>
