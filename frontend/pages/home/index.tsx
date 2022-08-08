@@ -15,7 +15,7 @@ function HomeContent(): ReactElement {
   return (
     <div className="m-10">
       <h1 className="text-3xl"> Bienvenido Usuario </h1>
-      <Link href={"/create-bill"}>
+      <Link href={"/create-sale"}>
         <button className="bg-green-1 text-white p-2 rounded-xl text-2xl w-full">
           Crear Factura
         </button>

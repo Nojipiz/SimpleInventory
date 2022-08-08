@@ -1,5 +1,5 @@
 import { ReactElement, useContext, useEffect, useState } from "react";
-import { BillContext } from ".";
+import { SaleContext } from ".";
 import LoadingComponent from "../../components/LoadingComponent";
 import useAuth from "../../hooks/useAuth";
 import { Product } from "../../models/Product";
@@ -74,10 +74,10 @@ function ListHeader(): ReactElement {
 
 function ProductComponent(props: ProductProps): ReactElement {
   const lineStyle: string = "font-normal text-1xl text-center pt-3 pb-3";
-  const { products, setProducts, descriptions, setDescriptions } = useContext(BillContext);
+  const { products, setProducts, descriptions, setDescriptions } = useContext(SaleContext);
 
   return (
-    <tr className="shadow-md rounded"
+    <tr className="shadow-md rounded cursor-pointer"
       onClick={() => {
         setProducts([...products, props.product]);
         setDescriptions([...descriptions, {

@@ -1,3 +1,4 @@
+import { clear } from "console";
 import { ChangeEvent, createContext, ReactElement, useContext, useEffect, useState } from "react";
 import InputElement from "../../components/InputElement";
 import NavBar from "../../components/NavBar";
@@ -28,7 +29,7 @@ interface ModalsContextModel {
   setSearchClientOpen: Function,
 }
 
-export const BillContext = createContext<BillContextModel>(
+export const SaleContext = createContext<SaleContextModel>(
   {
     products: [],
     setProducts: () => { },
@@ -39,7 +40,7 @@ export const BillContext = createContext<BillContextModel>(
   }
 );
 
-interface BillContextModel {
+interface SaleContextModel {
   products: Product[],
   setProducts: Function,
   descriptions: SaleDescription[],
@@ -48,8 +49,7 @@ interface BillContextModel {
   setCustomer: Function,
 }
 
-
-export default function CreateBillPage(): ReactElement {
+export default function CreateSalePage(): ReactElement {
   const [searchProductsOpen, setSearchProductsOpen] = useState<boolean>(false);
   const [searchCustomersOpen, setSearchCustomerOpen] = useState<boolean>(false);
 
@@ -64,7 +64,7 @@ export default function CreateBillPage(): ReactElement {
       searchClientOpen: searchCustomersOpen,
       setSearchClientOpen: setSearchCustomerOpen,
     }}>
-      <BillContext.Provider value={
+      <SaleContext.Provider value={
         {
           customer: customer, setCustomer: setCustomer,
           products: products, setProducts: setProducts,
@@ -73,14 +73,13 @@ export default function CreateBillPage(): ReactElement {
         {searchProductsOpen && <SearchProducts />}
         {searchCustomersOpen && <SearchCustomers />}
         <PageContent />
-      </BillContext.Provider >
+      </SaleContext.Provider >
       <NavBar />
     </ModalsContext.Provider>
   )
 }
 
 function PageContent(): ReactElement {
-
   return (
     <div className="m-10">
       <CustomerData />
@@ -90,8 +89,7 @@ function PageContent(): ReactElement {
 }
 
 function CustomerData(): ReactElement {
-  const { customer, setCustomer } = useContext(BillContext);
-  const { setSearchClientOpen } = useContext(ModalsContext);
+  const { customer, setCustomer } = useContext(SaleContext);
   const [typesCustomer, setTypesCustomers] = useState<TypeCustomer[]>();
   const [typesDocument, setTypesDocument] = useState<TypeDocument[]>();
   const { token } = useAuth();
@@ -111,32 +109,31 @@ function CustomerData(): ReactElement {
     getSelectElements();
   }, []);
 
+  useEffect(() => {
+    console.log("Main reload" + customer);
+  }, [customer]);
+
   const handleChange = ({ target: { name, value } }: any) => {
     setCustomer({ ...customer, [name]: value });
-    console.log(customer);
   };
 
   return (
     <>
-      <div className="flex flex-row items-center w-1/6 ">
-        <h1>Cliente</h1>
-        <button className="text-white text-1xl rounded-full pr-3 pl-3 pt-2 pb-2 m-2 bg-green-1 whitespace-nowrap"
-          onClick={() => setSearchClientOpen(true)}>
-          Buscar +
-        </button>
-      </div>
+      <SaleHeader />
       <div className="flex flex-row h-8 mt-2 ">
         <label>
           Identificación
         </label>
         <InputElement type="number"
           name="customer_id" placeHolder="identificacion del cliente"
+          value={customer.customer_id?.toString()}
           required={false} defaultValue={""}
           onChange={handleChange} />
         <label>
           Telefono
         </label>
         <InputElement type="number"
+          value={customer.customer_phone?.toString()}
           name="customer_phone" placeHolder="Numero de telefono"
           required={false} defaultValue={""}
           onChange={handleChange} />
@@ -147,18 +144,17 @@ function CustomerData(): ReactElement {
           typesDocument &&
           <TypesDocumentSelect typesDocument={typesDocument}
             handleChange={(documentTypeId: string) => {
-              const updatedCustomer = { ...customer, type_document: Number(documentTypeId) };
-              setCustomer(updatedCustomer);
+              setCustomer({ ...customer, type_document: Number(documentTypeId) });
             }} />
         }
         <label className="whitespace-nowrap">
           Tipo Persona
         </label>
         {typesCustomer &&
-          <TypesCustomersSelect typesCustomer={typesCustomer}
+          <TypesCustomersSelect
+            typesCustomer={typesCustomer}
             handleChange={(customerTypeId: string) => {
-              const updatedCustomer = { ...customer, type_customer: Number(customerTypeId) };
-              setCustomer(updatedCustomer);
+              setCustomer({ ...customer, type_person: Number(customerTypeId) });
             }} />
         }
       </div>
@@ -167,6 +163,7 @@ function CustomerData(): ReactElement {
           Nombres
         </label>
         <InputElement type="text"
+          value={customer.customer_name?.toString()}
           name="customer_name" placeHolder="Nombre"
           required={false} defaultValue={""}
           onChange={handleChange} />
@@ -174,6 +171,7 @@ function CustomerData(): ReactElement {
           Apellidos
         </label>
         <InputElement type="text"
+          value={customer.customer_last_name?.toString()}
           name="customer_last_name" placeHolder="Nombre"
           required={false} defaultValue={""}
           onChange={handleChange} />
@@ -181,12 +179,43 @@ function CustomerData(): ReactElement {
           Email
         </label>
         <InputElement type="email"
-          name="phone" placeHolder="email@email.com"
+          value={customer.customer_email?.toString()}
+          name="customer_email" placeHolder="email@email.com"
           required={false} defaultValue={""}
           onChange={handleChange} />
       </div>
     </>
   )
+}
+
+function SaleHeader(): ReactElement {
+  const { customer, setCustomer, products, setProducts, descriptions, setDescriptions } = useContext(SaleContext);
+  const { setSearchClientOpen } = useContext(ModalsContext);
+
+  const cleanData = () => {
+    setCustomer({});
+    setProducts([]);
+    setDescriptions([]);
+  }
+  const handleSaleUpload = () => {
+    cleanData();
+  };
+
+  return (
+    <div className="flex flex-row w-full items-center justify-between">
+      <div className="flex flex-row center w-1/6 items-center">
+        <h1>Cliente</h1>
+        <button className="text-white text-1xl rounded-full pr-3 pl-3 pt-2 pb-2 m-2 bg-green-1 whitespace-nowrap"
+          onClick={() => setSearchClientOpen(true)}>
+          Buscar +
+        </button>
+      </div>
+      <button className="text-white text-1xl rounded-full pr-3 pl-3 pt-2 pb-2 m-2 bg-green-1 whitespace-nowrap"
+        onClick={() => handleSaleUpload()}>
+        Guardar
+      </button>
+    </div>
+  );
 }
 
 
@@ -207,7 +236,7 @@ function ProductsData(): ReactElement {
 }
 
 function ProductsTable(): ReactElement {
-  const { products, descriptions } = useContext(BillContext);
+  const { products, descriptions } = useContext(SaleContext);
   useEffect(() => {
     console.log(descriptions);
   }, [descriptions]);
@@ -254,7 +283,7 @@ function TableHeader(): ReactElement {
 
 function ProductComponent(props: ProductProps): ReactElement {
   const lineStyle: string = "font-normal text-1xl text-center pt-3 pb-3 ";
-  const { descriptions, setDescriptions } = useContext(BillContext);
+  const { descriptions, setDescriptions } = useContext(SaleContext);
 
   return (
     <tr className="shadow-md rounded">
@@ -262,6 +291,7 @@ function ProductComponent(props: ProductProps): ReactElement {
         <InputElement
           type="number"
           name="quantity" placeHolder={""}
+          value={props.description.quantity?.toString()}
           onChange={(event: ChangeEvent<HTMLInputElement>) => {
             const index = descriptions.findIndex(description => description === props.description);
             const modifiedDescriptions = [...descriptions];
@@ -270,7 +300,9 @@ function ProductComponent(props: ProductProps): ReactElement {
             modifiedDescriptions[index] = modifiedElement;
             setDescriptions(modifiedDescriptions);
           }}
-          required={false} defaultValue={props.description.quantity?.toString() || ""} />
+          required={false}
+          defaultValue={"0"}
+        />
       </td>
       <td className={lineStyle}>
         {props.product.product_id}
@@ -294,17 +326,20 @@ interface ProductProps {
 }
 
 function TypesCustomersSelect(props: TypesSelectProps): ReactElement {
+  const { customer } = useContext(SaleContext);
   const handleChange = (event: any) => {
     const selected = event.target.value;
     props.handleChange(selected);
   };
 
   return (
-    <select className="w-full rounded-full p-1 pl-2 pr-2 bg-gray-1 text-center outline-none" id="category" name="category" onChange={handleChange}>
-      {props.typesCustomer.map((cat, index) =>
-        <option key={index} value={cat.type_person_id}>
-          {cat.type_person_name}
-        </option>)}
+    <select className="w-full rounded-full p-1 pl-2 pr-2 bg-gray-1 text-center outline-none" id="category" name="category"
+      onChange={handleChange} value={customer.type_person}>
+      {props.typesCustomer.map((type, index) =>
+        <option key={index} value={type.type_person_id}>
+          {type.type_person_name}
+        </option>
+      )}
     </select>
   )
 }
@@ -315,22 +350,24 @@ interface TypesSelectProps {
 }
 
 function TypesDocumentSelect(props: TypesDocumentProps): ReactElement {
+  const { customer } = useContext(SaleContext);
   const handleChange = (event: any) => {
     const selected = event.target.value;
     props.handleChange(selected);
   };
 
   return (
-    <select className="w-full rounded-full p-1 pl-2 pr-2 bg-gray-1 text-center outline-none" id="category" name="category" onChange={handleChange}>
-      {props.typesDocument.map((cat, index) =>
-        <option key={index} value={cat.type_document_id}>
-          {cat.type_document_name}
+    <select className="w-full rounded-full p-1 pl-2 pr-2 bg-gray-1 text-center outline-none" id="category"
+      name="category" onChange={handleChange} value={customer.type_document}>
+      {props.typesDocument.map((type, index) =>
+        <option key={index} value={type.type_document_id}>
+          {type.type_document_name}
         </option>)}
     </select>
   )
 }
 
 interface TypesDocumentProps {
-  typesDocument: TypeDocument[]
+  typesDocument: TypeDocument[];
   handleChange: (documentTypeId: string) => any;
 }
