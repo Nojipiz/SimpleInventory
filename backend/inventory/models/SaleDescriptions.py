@@ -6,9 +6,9 @@ class SaleDescriptions(models.Model):
     quantity = models.IntegerField()
     discount = models.FloatField()
     total = models.IntegerField()
-    sale_id = models.ForeignKey('Sales', models.DO_NOTHING)  
-    product_id = models.ForeignKey('Products', models.DO_NOTHING)
-    tax_id = models.ForeignKey('Taxes', models.DO_NOTHING)
+    sale = models.ForeignKey('Sales', models.DO_NOTHING)
+    product = models.ForeignKey('Products', models.DO_NOTHING)
+    tax = models.ForeignKey('Taxes', models.DO_NOTHING)
 
     objects = models.Manager()
 
