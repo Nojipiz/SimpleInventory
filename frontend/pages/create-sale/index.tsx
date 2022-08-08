@@ -237,9 +237,6 @@ function ProductsData(): ReactElement {
 
 function ProductsTable(): ReactElement {
   const { products, descriptions } = useContext(SaleContext);
-  useEffect(() => {
-    console.log(descriptions);
-  }, [descriptions]);
   return (
     <table className="w-full mt-2">
       <TableHeader />
