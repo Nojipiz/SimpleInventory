@@ -6,6 +6,7 @@ import SearchserInput from "../../components/SearcherInput";
 import useAuth from "../../hooks/useAuth";
 import { getSearchOptions } from "../api/Searcher";
 import Sale from "../../models/Sale";
+import { getAllSales } from "../api/Sales";
 
 const ReloadSalesContext = createContext<ReloadContext>({ reload: false, setReload: () => { } });
 const SearchSalesContext = createContext<SearchContext>(
@@ -81,8 +82,8 @@ function SalesList(): ReactElement {
 
   const loadDataHandler = async () => {
     setLoading(true);
-    //const elements = await getAllCategories(token?.access);
-    //setAllCategories(elements);
+    const elements = await getAllSales(token?.access);
+    setAllSales(elements);
     setLoading(false);
   }
 
@@ -115,16 +116,13 @@ function ListHeader(): ReactElement {
     <thead className="sticky top-0">
       <tr className="table-auto">
         <th className={lineStyle}>
-          Nombre
-        </th>
-        <th className={lineStyle}>
-          Descripcion
-        </th>
-        <th className={lineStyle}>
           Fecha
         </th>
         <th className={lineStyle}>
-          Producto
+          Cliente
+        </th>
+        <th className={lineStyle}>
+          Descripción
         </th>
       </tr>
     </thead>
@@ -133,15 +131,14 @@ function ListHeader(): ReactElement {
 
 function SaleComponent(props: SaleProps): ReactElement {
   const lineStyle: string = "font-normal text-1xl text-center pt-3 pb-3";
-  const { reload, setReload } = useContext(ReloadSalesContext);
-  const { token } = useAuth();
+
   return (
     <tr className="shadow-md rounded">
       <td className={lineStyle}>
-        {}
+        {props.sale.sale_date}
       </td>
       <td className={lineStyle}>
-        {}
+        {props.sale.customer_id}
       </td>
     </tr>
   )

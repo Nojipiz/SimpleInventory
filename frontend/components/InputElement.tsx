@@ -3,6 +3,7 @@ import { ChangeEvent, ReactElement } from "react";
 export default function InputElement(props: Props): ReactElement {
     return (
         <input
+            value={props.value || ""}
             className="w-full border-none outline-none bg-gray-1 text-black rounded-full p-1 pl-2 pr-2 text-center"
             type={props.type} name={props.name}
             placeholder={props.placeHolder}
@@ -15,6 +16,7 @@ export default function InputElement(props: Props): ReactElement {
 }
 
 interface Props {
+    value?: string;
     type?: string;
     name?: string;
     placeHolder?: string;
