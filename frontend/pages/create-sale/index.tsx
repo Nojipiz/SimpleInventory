@@ -1,17 +1,19 @@
-import { clear } from "console";
 import { ChangeEvent, createContext, ReactElement, useContext, useEffect, useState } from "react";
 import InputElement from "../../components/InputElement";
 import NavBar from "../../components/NavBar";
 import useAuth from "../../hooks/useAuth";
 import Customer from "../../models/Customer";
+import Sale from "../../models/Sale";
 import { Product } from "../../models/Product";
 import SaleDescription from "../../models/SaleDescription";
 import TypeCustomer from "../../models/TypeCustomer";
 import TypeDocument from "../../models/TypeDocument";
+import { createSale, createSaleDescriptions } from "../api/Sales";
 import { getAllTypeCustomers } from "../api/TypeCustomers";
 import { getAllTypeDocuments } from "../api/TypeDocuments";
 import SearchCustomers from "./SearchCustomers";
 import { SearchProducts } from "./SearchProducts";
+import { formatDate } from "../../utils/Utils";
 
 export const ModalsContext = createContext<ModalsContextModel>(
   {
@@ -189,15 +191,26 @@ function CustomerData(): ReactElement {
 }
 
 function SaleHeader(): ReactElement {
-  const { customer, setCustomer, products, setProducts, descriptions, setDescriptions } = useContext(SaleContext);
+  const { customer, setCustomer, setProducts, descriptions, setDescriptions } = useContext(SaleContext);
   const { setSearchClientOpen } = useContext(ModalsContext);
+  const { token } = useAuth();
 
   const cleanData = () => {
     setCustomer({});
     setProducts([]);
     setDescriptions([]);
   }
-  const handleSaleUpload = () => {
+  const getSale = (): Sale => {
+    return {
+      sale_date: formatDate(new Date()),
+      sale_details: "Detalles",
+      customer_id: customer.customer_id || 1,
+      employee_id: 0,
+    }
+  }
+  const handleSaleUpload = async () => {
+    const saleId = await createSale(token?.access, getSale());
+    await createSaleDescriptions(token?.access, descriptions, saleId);
     cleanData();
   };
 
@@ -294,6 +307,7 @@ function ProductComponent(props: ProductProps): ReactElement {
             const modifiedDescriptions = [...descriptions];
             const modifiedElement = props.description;
             modifiedElement.quantity = Number(event.target.value);
+            modifiedElement.total = Number(props.product.product_price) * modifiedElement.quantity;
             modifiedDescriptions[index] = modifiedElement;
             setDescriptions(modifiedDescriptions);
           }}
