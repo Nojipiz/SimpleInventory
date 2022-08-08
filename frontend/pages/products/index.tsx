@@ -1,13 +1,13 @@
 import Fuse from "fuse.js";
-import {createContext, ReactElement, useContext, useEffect, useState} from "react";
+import { createContext, ReactElement, useContext, useEffect, useState } from "react";
 import ActionButton from "../../components/ActionButton";
 import LoadingComponent from "../../components/LoadingComponent";
 import NavBar from "../../components/NavBar";
 import SearchserInput from "../../components/SearcherInput";
 import useAuth from "../../hooks/useAuth";
-import {Product} from "../../models/Product";
-import {deleteProduct, getAllProducts} from "../api/Products";
-import {getSearchOptions} from "../api/Searcher";
+import { Product } from "../../models/Product";
+import { deleteProduct, getAllProducts } from "../api/Products";
+import { getSearchOptions } from "../api/Searcher";
 import CreateProduct from "./CreateProduct";
 import * as Icon from "react-bootstrap-icons";
 import EditProduct from "./EditProduct";
@@ -73,13 +73,13 @@ export default function Products(): ReactElement {
   const searchHandler = async (keyword: string) => {
     const fuse = new Fuse<Product>(allProducts, getSearchOptions(["product_name"]));
     const searchResult: Fuse.FuseResult<Product>[] = fuse.search(keyword);
-    const resultsList: Product[] = searchResult.map(({item}) => item);
+    const resultsList: Product[] = searchResult.map(({ item }) => item);
     setFilteredProducts(resultsList);
   }
 
   return (
     <ReloadProductsContext.Provider
-      value={{reload: reloadProducts, setReload: setReloadProducts}}>
+      value={{ reload: reloadProducts, setReload: setReloadProducts }}>
       <EditProductContext.Provider value={{
         isOpen: editProductOpen,
         setOpen: setEditProductOpen,
@@ -87,11 +87,11 @@ export default function Products(): ReactElement {
         setIdProduct: setIdProduct
       }}>
         {
-          editProductOpen===true && <EditProduct idProduct={idProduct}/>
+          editProductOpen === true && <EditProduct idProduct={idProduct} />
         }
-        <AddProductContext.Provider value={{isOpen: addProductOpen, setOpen: setAddProductOpen}}>
+        <AddProductContext.Provider value={{ isOpen: addProductOpen, setOpen: setAddProductOpen }}>
           {addProductOpen &&
-            <CreateProduct/>
+            <CreateProduct />
           }
           <SearchProductContext.Provider value={{
             search: searchHandler,
@@ -99,11 +99,9 @@ export default function Products(): ReactElement {
             allProducts: allProducts,
             setAllProducts: setAllProducts
           }}>
-            <Header/>
-
-            <ProductsList/>
-
-            <NavBar/>
+            <Header />
+            <ProductsList />
+            <NavBar />
           </SearchProductContext.Provider>
         </AddProductContext.Provider>
       </EditProductContext.Provider>
@@ -113,8 +111,8 @@ export default function Products(): ReactElement {
 
 
 function Header(): ReactElement {
-  const {setOpen} = useContext(AddProductContext);
-  const {search, allProducts} = useContext(SearchProductContext);
+  const { setOpen } = useContext(AddProductContext);
+  const { search, allProducts } = useContext(SearchProductContext);
   const [lastSearch, setLastSearch] = useState<string>("");
 
   useEffect(() => {
@@ -128,10 +126,10 @@ function Header(): ReactElement {
       <SearchserInput placeholder="Busca los productos aqui" onSearch={(text: string) => {
         setLastSearch(text);
         search(text);
-      }}/>
+      }} />
       <div className="w-100">
         <ActionButton onClick={() => setOpen(true)} text="Crear Producto" dark={false}
-                      preventDefault={false}/>
+          preventDefault={false} />
       </div>
     </header>
   );
@@ -139,11 +137,11 @@ function Header(): ReactElement {
 
 
 function ProductsList(): ReactElement {
-  const {allProducts, setAllProducts, filteredProducts} = useContext(SearchProductContext);
-  const {isOpen} = useContext(AddProductContext);
-  const {reload} = useContext(ReloadProductsContext);
+  const { allProducts, setAllProducts, filteredProducts } = useContext(SearchProductContext);
+  const { isOpen } = useContext(AddProductContext);
+  const { reload } = useContext(ReloadProductsContext);
   const [loading, setLoading] = useState<boolean>();
-  const {token} = useAuth();
+  const { token } = useAuth();
 
   const loadDataHandler = async () => {
     setLoading(true);
@@ -161,7 +159,7 @@ function ProductsList(): ReactElement {
   return (
     <div className="flex flex-col items-center justify-center m-14 mb-20">
       <table className="w-full">
-        <ListHeader/>
+        <ListHeader />
         <tbody>
           {filteredProducts.length > 0 ?
             filteredProducts?.map((product, index) => <ProductComponent product={product} key={index} />) :
@@ -172,7 +170,7 @@ function ProductsList(): ReactElement {
         </tbody>
       </table>
       {loading === true &&
-        <LoadingComponent/>
+        <LoadingComponent />
       }
     </div>
   )
@@ -182,41 +180,47 @@ function ListHeader(): ReactElement {
   const lineStyle: string = "font-normal text-1xl bg-white";
   return (
     <thead className="sticky top-0">
-    <tr className="table-auto">
-      <th className={lineStyle}>
-        Nombre
-      </th>
-      <th className={lineStyle}>
-        Unidad de medida
-      </th>
-      <th className={lineStyle}>
-        Valor Unitario
-      </th>
-      <th className={lineStyle}>
-        Inventario
-      </th>
-      <th className={lineStyle}>
-        Entrega
-      </th>
-      <th className={lineStyle}>
-        Borrar
-      </th>
-      <th className={lineStyle}>
-        Editar
-      </th>
-    </tr>
+      <tr className="table-auto">
+        <th className={lineStyle}>
+          Codigo
+        </th>
+        <th className={lineStyle}>
+          Nombre
+        </th>
+        <th className={lineStyle}>
+          Unidad de medida
+        </th>
+        <th className={lineStyle}>
+          Valor Unitario
+        </th>
+        <th className={lineStyle}>
+          Inventario
+        </th>
+        <th className={lineStyle}>
+          Entrega
+        </th>
+        <th className={lineStyle}>
+          Borrar
+        </th>
+        <th className={lineStyle}>
+          Editar
+        </th>
+      </tr>
     </thead>
   )
 }
 
 function ProductComponent(props: ProductProps): ReactElement {
   const lineStyle: string = "font-normal text-1xl text-center pt-3 pb-3";
-  const {reload, setReload} = useContext(ReloadProductsContext);
-  const {token} = useAuth();
-  const {setOpen, setIdProduct} = useContext(EditProductContext);
+  const { reload, setReload } = useContext(ReloadProductsContext);
+  const { token } = useAuth();
+  const { setOpen, setIdProduct } = useContext(EditProductContext);
 
   return (
     <tr className="shadow-md rounded">
+      <td className={lineStyle}>
+        {props.product.product_id}
+      </td>
       <td className={lineStyle}>
         {props.product.product_name}
       </td>
@@ -234,20 +238,20 @@ function ProductComponent(props: ProductProps): ReactElement {
       </td>
       <td className={lineStyle}>
         <button className="items-center justify-center"
-                onClick={async () => {
-                  await deleteProduct(token?.access, props.product.product_id);
-                  setReload(!reload);
-                }}>
-          <Icon.Trash size={28} className={"text-black hover:scale-105"}/>
+          onClick={async () => {
+            await deleteProduct(token?.access, props.product.product_id);
+            setReload(!reload);
+          }}>
+          <Icon.Trash size={28} className={"text-black hover:scale-105"} />
         </button>
       </td>
       <td className={lineStyle}>
         <button className="items-center justify-center"
-                onClick={() => {
-                  setOpen(true);
-                  setIdProduct(props.product.product_id);
-                }}>
-          <Icon.PencilSquare size={28} className={"text-black hover:scale-105"}/>
+          onClick={() => {
+            setOpen(true);
+            setIdProduct(props.product.product_id);
+          }}>
+          <Icon.PencilSquare size={28} className={"text-black hover:scale-105"} />
         </button>
       </td>
     </tr>

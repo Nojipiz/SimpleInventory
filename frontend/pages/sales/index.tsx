@@ -116,6 +116,9 @@ function ListHeader(): ReactElement {
     <thead className="sticky top-0">
       <tr className="table-auto">
         <th className={lineStyle}>
+          Codigo
+        </th>
+        <th className={lineStyle}>
           Fecha
         </th>
         <th className={lineStyle}>
@@ -134,6 +137,9 @@ function SaleComponent(props: SaleProps): ReactElement {
 
   return (
     <tr className="shadow-md rounded">
+      <td className={lineStyle}>
+        {props.sale.sale_id}
+      </td>
       <td className={lineStyle}>
         {props.sale.sale_date}
       </td>
