@@ -1,5 +1,5 @@
 import { ReactElement, useContext, useEffect, useState } from "react";
-import { SaleContext } from ".";
+import { ModalsContext, SaleContext } from ".";
 import LoadingComponent from "../../components/LoadingComponent";
 import useAuth from "../../hooks/useAuth";
 import Customer from "../../models/Customer";
@@ -73,12 +73,13 @@ function ListHeader(): ReactElement {
 function CustomerComponent(props: CustomerProps): ReactElement {
   const lineStyle: string = "font-normal text-1xl text-center pt-3 pb-3 justify-center items-center";
   const { setCustomer } = useContext(SaleContext);
+  const { setSearchClientOpen } = useContext(ModalsContext);
 
   return (
     <tr className="shadow-md rounded cursor-pointer"
       onClick={() => {
         setCustomer(props.customer);
-        console.log(props.customer);
+        setSearchClientOpen(false);
       }}>
       <td className={lineStyle}>
         {props.customer.customer_id}
