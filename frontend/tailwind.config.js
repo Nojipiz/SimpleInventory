@@ -6,9 +6,9 @@ module.exports = {
   ],
   theme: {
     screens: {
-      'phone': {'max': '450px'},
-      'tablet': {'max': '750px'},
-      'laptop': {'max': '1280px'},
+      'phone': { 'max': '450px' },
+      'tablet': { 'max': '750px' },
+      'laptop': { 'max': '1280px' },
     },
     fontWeight: {
       normal: 400,
@@ -32,6 +32,7 @@ module.exports = {
         2: '#DCDCDD',
         3: '#838383',
       },
+      'red': '#fb403f',
     },
   },
   plugins: [],

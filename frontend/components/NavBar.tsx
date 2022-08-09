@@ -34,7 +34,7 @@ function HomeButton(): ReactElement {
 
 function BillsButton(): ReactElement {
   return (
-    <Link href={"/bills"}>
+    <Link href={"/sales"}>
       <li className="flex flex-col items-center justify-center p-3 ml-2 cursor-pointer">
         <Icon.Receipt size={20} />
         <a>Facturas</a>
