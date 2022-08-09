@@ -12,7 +12,7 @@ import { createSale, createSaleDescriptions } from "../api/Sales";
 import { getAllTypeCustomers } from "../api/TypeCustomers";
 import { getAllTypeDocuments } from "../api/TypeDocuments";
 import SearchCustomers from "./SearchCustomers";
-import { SearchProducts } from "./SearchProducts";
+import SearchProducts from "./SearchProducts";
 import { formatDate } from "../../utils/Utils";
 
 export const ModalsContext = createContext<ModalsContextModel>(
