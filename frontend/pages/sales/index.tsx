@@ -122,7 +122,7 @@ function ListHeader(): ReactElement {
           Fecha
         </th>
         <th className={lineStyle}>
-          Cliente
+          Id Cliente
         </th>
         <th className={lineStyle}>
           Descripción
@@ -145,6 +145,9 @@ function SaleComponent(props: SaleProps): ReactElement {
       </td>
       <td className={lineStyle}>
         {props.sale.customer_id}
+      </td>
+      <td className={lineStyle}>
+        {props.sale.sale_details}
       </td>
     </tr>
   )
