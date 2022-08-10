@@ -1,6 +1,5 @@
 import { ChangeEvent, createContext, ReactElement, useContext, useEffect, useState } from "react";
-import InputElement from "../../components/InputElement";
-import NavBar from "../../components/NavBar";
+import InputElement from "../../components/InputElement"; import NavBar from "../../components/NavBar";
 import useAuth from "../../hooks/useAuth";
 import Customer from "../../models/Customer";
 import Sale from "../../models/Sale";
@@ -98,7 +97,16 @@ function PageContent(): ReactElement {
 }
 
 function BillData(): ReactElement {
-  const { sale, setSale } = useContext(SaleContext);
+  const { sale, setSale, descriptions } = useContext(SaleContext);
+  const calculateTotal = (): number => {
+    if (descriptions.length <= 0) return 0;
+    const validData: number[] = descriptions
+      .map(item => item.total)
+      .filter(item => item !== undefined && item !== null) as number[]
+    const total: number = validData.reduce((total: number, currentPrice: number) => Number(total) + Number(currentPrice));
+    return total || 0;
+  };
+
   return (
     <div className="flex flex-row bottom-0 m-2">
       <label>
@@ -109,6 +117,9 @@ function BillData(): ReactElement {
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
           setSale({ ...sale, sale_details: e.target.value });
         }} />
+      <h2 className="whitespace-nowrap">
+        Total ${calculateTotal()}
+      </h2>
     </div>
   );
 }
