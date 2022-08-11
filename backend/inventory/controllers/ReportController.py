@@ -2,9 +2,13 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from django.db.models import Sum, IntegerField
+from django.db.models.functions import Cast
+from itertools import chain
 
 from ..models import SaleDescriptions
 from ..models.Sales import Sales
+from ..serializers.SaleDescriptionSerializer import SaleDescriptionSerializer
 
 from ..serializers.SalesSerializer import SalesSerializer
 
@@ -12,27 +16,35 @@ from ..serializers.SalesSerializer import SalesSerializer
 class ReportController(viewsets.GenericViewSet):
     # permission_classes = (IsAuthenticated,)
 
-    queryset = Sales.objects.all()
+    queryset = SaleDescriptions.objects.all()
 
-    @action(detail=False, methods=['get'], url_path='report-sales')
-    def a_simple_def(self, request, pk=None):
+    @action(detail=False, methods=['get'], url_path='report-sales', url_name='sales-by-date',
+            )
+    def report_sales(self, request, pk=None):
         """
-        Parameters for the report: in the url: ?start_date=2019-01-01&end_date=2019-01-31
-        param1 -- start date of the report
-        param2 -- end date of the report
+        Parameters for the report: in the url: ?month=1&year=2020
+        param1 -- month of the report
+        param2 -- year of the report
         """
         params = {
-            'start_date': request.query_params.get('start_date', None),
-            'end_date': request.query_params.get('end_date', None)
+            'month': request.query_params.get('month', None),
+            'year': request.query_params.get('year', None)
         }
-        print(params)
-        if params['start_date'] is None or params['end_date'] is None:
-            return Response({'error': 'start_date and end_date are required'})
-        sales = self.queryset.filter(
-            sale_date__range=[params['start_date'], params['end_date']]
+        if params['month'] is None or params['year'] is None:
+            return Response({'error': 'month and year are required'}, status=400)
+
+        sales = Sales.objects.filter(
+            sale_date__month=params['month'],
+            sale_date__year=params['year']
         )
 
-        total_sales = 0
-        SaleDescriptions.objects.all().filter(sale_id=sales.sale_id).aggregate()
+        sale_details = SaleDescriptions.objects.filter(sale__in=sales)
+        serializer_d = SaleDescriptionSerializer(sale_details, many=True)
+
+        # Sum total of each sale
+        total_sales = sale_details.aggregate(total=Sum(Cast('total', IntegerField())))
+
         serializer = SalesSerializer(sales, many=True)
-        return Response(serializer.data)
+        return Response({'sales': serializer.data, 'details': serializer_d.data,
+                         'total_sales': total_sales},
+                        status=200)
