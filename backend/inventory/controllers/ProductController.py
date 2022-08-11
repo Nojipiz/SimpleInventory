@@ -14,7 +14,9 @@ class ProductController(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        return Products.objects.all()
+        elements = Products.objects.all()
+        print(elements)
+        return elements
 
     def update(self, request, *args, **kwargs):
         print(request.data['product_id'])

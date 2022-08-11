@@ -1,6 +1,5 @@
 import { ChangeEvent, createContext, ReactElement, useContext, useEffect, useState } from "react";
-import InputElement from "../../components/InputElement";
-import NavBar from "../../components/NavBar";
+import InputElement from "../../components/InputElement"; import NavBar from "../../components/NavBar";
 import useAuth from "../../hooks/useAuth";
 import Customer from "../../models/Customer";
 import Sale from "../../models/Sale";
@@ -33,6 +32,8 @@ interface ModalsContextModel {
 
 export const SaleContext = createContext<SaleContextModel>(
   {
+    sale: {},
+    setSale: () => { },
     products: [],
     setProducts: () => { },
     descriptions: [],
@@ -43,6 +44,8 @@ export const SaleContext = createContext<SaleContextModel>(
 );
 
 interface SaleContextModel {
+  sale: Sale,
+  setSale: Function,
   products: Product[],
   setProducts: Function,
   descriptions: SaleDescription[],
@@ -57,6 +60,7 @@ export default function CreateSalePage(): ReactElement {
 
   const [customer, setCustomer] = useState<Customer>({});
   const [products, setProducts] = useState<Product[]>([]);
+  const [sale, setSale] = useState<Sale>({});
   const [descriptions, setDescriptions] = useState<SaleDescription[]>([]);
 
   return (
@@ -68,6 +72,7 @@ export default function CreateSalePage(): ReactElement {
     }}>
       <SaleContext.Provider value={
         {
+          sale: sale, setSale: setSale,
           customer: customer, setCustomer: setCustomer,
           products: products, setProducts: setProducts,
           descriptions: descriptions, setDescriptions: setDescriptions
@@ -85,9 +90,38 @@ function PageContent(): ReactElement {
   return (
     <div className="m-10">
       <CustomerData />
+      <BillData />
       <ProductsData />
     </div>
   )
+}
+
+function BillData(): ReactElement {
+  const { sale, setSale, descriptions } = useContext(SaleContext);
+  const calculateTotal = (): number => {
+    if (descriptions.length <= 0) return 0;
+    const validData: number[] = descriptions
+      .map(item => item.total)
+      .filter(item => item !== undefined && item !== null) as number[]
+    const total: number = validData.reduce((total: number, currentPrice: number) => Number(total) + Number(currentPrice));
+    return total || 0;
+  };
+
+  return (
+    <div className="flex flex-row bottom-0 m-2">
+      <label>
+        Descripción
+      </label>
+      <InputElement
+        value={sale.sale_details}
+        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+          setSale({ ...sale, sale_details: e.target.value });
+        }} />
+      <h2 className="whitespace-nowrap">
+        Total ${calculateTotal()}
+      </h2>
+    </div>
+  );
 }
 
 function CustomerData(): ReactElement {
@@ -187,7 +221,7 @@ function CustomerData(): ReactElement {
 }
 
 function SaleHeader(): ReactElement {
-  const { customer, setCustomer, setProducts, descriptions, setDescriptions } = useContext(SaleContext);
+  const { sale, customer, setCustomer, setProducts, descriptions, setDescriptions } = useContext(SaleContext);
   const { setSearchClientOpen } = useContext(ModalsContext);
   const { token } = useAuth();
 
@@ -199,7 +233,7 @@ function SaleHeader(): ReactElement {
   const getSale = (): Sale => {
     return {
       sale_date: formatDate(new Date()),
-      sale_details: "Detalles",
+      sale_details: sale.sale_details || "No descripción",
       customer_id: customer.customer_id || 1,
       employee_id: 0,
     }
