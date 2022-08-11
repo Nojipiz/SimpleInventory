@@ -9,4 +9,6 @@ class SalesController(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        return Sales.objects.all()
+        elements = Sales.objects.all()
+        print(elements)
+        return elements
